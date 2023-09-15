@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
+import java.util.Locale;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -81,7 +82,7 @@ public class Window {
                 }
 
                 // Calculate the time between the last two logic thread runs
-                deltaTime = sleepTime / 1000.0f + runTime;
+                deltaTime = sleepTime > 0 ? sleepTime / 1000.0f + runTime : runTime;
             }
         }
 
@@ -150,8 +151,6 @@ public class Window {
      * Runs the game.
      */
     public void run() {
-        init();
-
         logicThread = new LogicThread(tickRate);
         logicThread.start();
 
@@ -163,7 +162,7 @@ public class Window {
     /**
      * Initializes the window.
      */
-    private void init() {
+    public void init() {
         // Put the error messages on the standard error stream
         GLFWErrorCallback.createPrint(System.err).set();
 
@@ -209,15 +208,15 @@ public class Window {
         glfwSwapInterval(vsync ? 1 : 0);
 
         glfwShowWindow(windowHandle);
+
+        // Create the OpenGL context
+        GL.createCapabilities();
     }
 
     /**
      * The main rendering loop of the game.
      */
     private void loop() {
-        // Create the OpenGL context
-        GL.createCapabilities();
-
         // Set the clear color to red
         glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
@@ -228,9 +227,6 @@ public class Window {
         while (!glfwWindowShouldClose(windowHandle)) {
             // Clear the color and depth buffers
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            // Swap the front and back buffers
-            glfwSwapBuffers(windowHandle);
 
             // Render the game
             LogicManager.getInstance().render(deltaTime);
@@ -244,10 +240,13 @@ public class Window {
             glfwSetWindowTitle(
                     windowHandle,
                     title +
-                        " | FPS: " + String.format("%06.2f", 1.0f / deltaTime) +
-                        " | UPS: " + String.format("%04.1f", 1.0f / logicThread.getDeltaTime()) +
+                        " | FPS: " + String.format(Locale.ENGLISH, "%06.2f", 1.0f / deltaTime) +
+                        " | UPS: " + String.format(Locale.ENGLISH, "%04.1f", 1.0f / logicThread.getDeltaTime()) +
                         "/" + logicThread.getTickRate()
             );
+
+            // Swap the front and back buffers
+            glfwSwapBuffers(windowHandle);
 
             // Poll for window events
             glfwPollEvents();

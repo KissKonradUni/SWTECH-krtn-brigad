@@ -48,8 +48,15 @@ public class Entity extends Serializable {
      */
     @Override
     public String serialize() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
+        JsonObject object = new JsonObject();
+        object.addProperty("name", name);
+        object.addProperty("type", getClass().getCanonicalName());
+
+        JsonArray components = new JsonArray();
+        this.components.forEach(component -> components.add(JsonParser.parseString(component.serialize())));
+
+        object.add("components", components);
+        return new Gson().toJson(object);
     }
 
     /**
