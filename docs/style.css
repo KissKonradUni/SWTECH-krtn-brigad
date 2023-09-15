@@ -1,0 +1,54 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    /* use a font that is good for documentation */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.stretch {
+    min-height: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.sidebar {
+    width: 16rem;
+    
+    border-right: 1px solid black;
+}
+
+#content {
+    flex: 1;
+    padding: 0 1rem;
+}
+
+.title {
+    text-align: center;
+    margin: 1rem;
+}
+
+.sidebar > a {
+    display: block;
+    margin-left: 1rem;
+    width: 100%;
+}
+
+ul {
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+h1 {
+    margin: 1rem 0;
+}
+
+p {
+    margin-bottom: 1rem;
+}
