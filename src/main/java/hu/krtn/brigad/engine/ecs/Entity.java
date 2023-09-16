@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hu.krtn.brigad.engine.serialization.SaveManager;
 import hu.krtn.brigad.engine.serialization.Serializable;
+import hu.krtn.brigad.engine.window.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -97,11 +98,11 @@ public class Entity extends Serializable {
                 component.deserialize(jsonComponent.toString());
                 this.components.add(component);
             } catch (ClassNotFoundException e) {
-                System.err.println("Component class not found: " + componentType);
+                Logger.error("Component class not found: " + componentType);
             } catch (NoSuchMethodException e) {
-                System.err.println("Component class constructor was not found: " + componentType);
+                Logger.error("Component class constructor was not found: " + componentType);
             } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                System.err.println("Component class does not have an empty constructor: " + componentType);
+                Logger.error("Component class does not have an empty constructor: " + componentType);
             }
         }
 

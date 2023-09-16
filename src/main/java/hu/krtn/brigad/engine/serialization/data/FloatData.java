@@ -1,5 +1,7 @@
 package hu.krtn.brigad.engine.serialization.data;
 
+import hu.krtn.brigad.engine.window.Logger;
+
 /**
  * Float data class for serialization of extra data that is not paired
  * to any component or entity.
@@ -30,10 +32,10 @@ public class FloatData extends Data<Float> {
         try {
             this.setData(Float.parseFloat(data));
         } catch (NumberFormatException e) {
-            System.err.println("FloatData deserialize: data is not a number");
+            Logger.error("FloatData deserialize: data is not a number");
             this.setData(0f);
         } catch (NullPointerException e) {
-            System.err.println("FloatData deserialize: data is null");
+            Logger.error("FloatData deserialize: data is null");
             this.setData(0f);
         }
     }

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.serialization.data.*;
+import hu.krtn.brigad.engine.window.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -68,7 +69,7 @@ public class ExtraDataManager extends Serializable {
         try {
             result = (StringData) dataCollection.get(key);
         } catch (ClassCastException e) {
-            System.err.println("Data is not a StringData: " + key);
+            Logger.error("Data is not a StringData: " + key);
         }
         return result;
     }
@@ -83,7 +84,7 @@ public class ExtraDataManager extends Serializable {
         try {
             result = (FloatData) dataCollection.get(key);
         } catch (ClassCastException e) {
-            System.err.println("Data is not a FloatData: " + key);
+            Logger.error("Data is not a FloatData: " + key);
         }
         return result;
     }
@@ -98,7 +99,7 @@ public class ExtraDataManager extends Serializable {
         try {
             result = (IntData) dataCollection.get(key);
         } catch (ClassCastException e) {
-            System.err.println("Data is not a IntData: " + key);
+            Logger.error("Data is not a IntData: " + key);
         }
         return result;
     }
@@ -171,11 +172,11 @@ public class ExtraDataManager extends Serializable {
                 data_.deserialize(value);
                 dataCollection.put(key, data_);
             } catch (ClassNotFoundException e) {
-                System.err.println("Data class not found: " + dataType);
+                Logger.error("Data class not found: " + dataType);
             } catch (NoSuchMethodException e) {
-                System.err.println("Data class constructor was not found: " + dataType);
+                Logger.error("Data class constructor was not found: " + dataType);
             } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                System.err.println("Data class does not have an empty constructor: " + dataType);
+                Logger.error("Data class does not have an empty constructor: " + dataType);
             }
         });
     }

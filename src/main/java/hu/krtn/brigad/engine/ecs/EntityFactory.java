@@ -1,5 +1,7 @@
 package hu.krtn.brigad.engine.ecs;
 
+import hu.krtn.brigad.engine.window.Logger;
+
 /**
  * The EntityFactory class is used to create entities and register them to the EntityManager.
  * The purpose of this class is to don't leave references to the created entities.
@@ -9,12 +11,8 @@ public class EntityFactory {
 
     private final Entity entity;
 
-    public EntityFactory(String name, boolean persistent) {
+    private EntityFactory(String name, boolean persistent) {
         entity = new Entity(name, persistent);
-    }
-
-    public EntityFactory(String name) {
-        this(name, true);
     }
 
     /**
@@ -24,6 +22,13 @@ public class EntityFactory {
      */
     public EntityFactory addComponent(Component component) {
         entity.addComponent(component);
+        Class<? extends Component>[] dependencies = component.getDependencies();
+        try {
+            if (dependencies != null)
+                component.fulfillDependencies(entity);
+        } catch (ComponentDependencyException e) {
+            Logger.error(e.getMessage());
+        }
         return this;
     }
 
@@ -40,8 +45,19 @@ public class EntityFactory {
     /**
      * Builds and registers the entity.
      */
-    public void BuildAndRegister() {
-        EntityManager.getInstance().registerEntity(entity);
+    public void buildAndRegister() {
+        // No need to register the entity, because it is registered in the constructor.
     }
 
+    public Component getComponent(Class<? extends Component> transformComponentClass) {
+        return entity.getComponent(transformComponentClass);
+    }
+
+    public static EntityFactory create(String name) {
+        return new EntityFactory(name, true);
+    }
+
+    public static EntityFactory create(String name, boolean persistent) {
+        return new EntityFactory(name, persistent);
+    }
 }

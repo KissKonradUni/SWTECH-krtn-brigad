@@ -11,19 +11,31 @@ public class TestLogic extends Logic {
         super(new Query("LocalPlayer"));
     }
 
+    private float time = 0.0f;
+
     @Override
     protected void update(Entity[] queryTargets, float fixedDeltaTime) {
-        for (Entity queryTarget : queryTargets) {
-            TransformComponent tc = (TransformComponent) queryTarget.getComponent(TransformComponent.class);
-            tc.setPosition(
-                tc.getPosition().add(0, 0, -0.1f * fixedDeltaTime)
-            );
-        }
+
     }
 
     @Override
     protected void render(Entity[] queryTargets, float deltaTime) {
-
+        for (Entity queryTarget : queryTargets) {
+            TransformComponent tc = (TransformComponent) queryTarget.getComponent(TransformComponent.class);
+            tc.setRotation(tc.getRotation().add(
+                    0.0f,
+                    deltaTime * 100.0f,
+                    0.0f
+            ));
+            tc.setPosition(
+                    tc.getPosition().set(
+                            0.0f,
+                            (float) Math.sin(time),
+                            0.0f
+                    )
+            );
+        }
+        time += deltaTime;
     }
 
 }

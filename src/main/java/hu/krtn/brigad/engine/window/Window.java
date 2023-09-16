@@ -78,7 +78,7 @@ public class Window {
                         //noinspection BusyWait
                         Thread.sleep((long) sleepTime);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Logger.error(e.getMessage());
                 }
 
                 // Calculate the time between the last two logic thread runs
@@ -153,10 +153,13 @@ public class Window {
     public void run() {
         logicThread = new LogicThread(tickRate);
         logicThread.start();
+        Logger.log("Logic thread started");
 
         loop();
+        Logger.log("Window closed");
 
         logicThread.stopRunning();
+        Logger.log("Logic thread stopped");
     }
 
     /**
@@ -180,6 +183,7 @@ public class Window {
         if (windowHandle == 0) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
+        Logger.log("Window created");
 
         // TODO: Implement a real input system
         glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
@@ -211,6 +215,8 @@ public class Window {
 
         // Create the OpenGL context
         GL.createCapabilities();
+        Logger.log("OpenGL version: " + glGetString(GL_VERSION));
+        Logger.log("OpenGL context created.");
     }
 
     /**

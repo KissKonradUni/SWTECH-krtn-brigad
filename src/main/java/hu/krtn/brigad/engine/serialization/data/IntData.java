@@ -1,5 +1,7 @@
 package hu.krtn.brigad.engine.serialization.data;
 
+import hu.krtn.brigad.engine.window.Logger;
+
 /**
  * Int data class for serialization of extra data that is not paired
  * to any component or entity.
@@ -30,10 +32,10 @@ public class IntData extends Data<Integer> {
         try {
             this.setData(Integer.parseInt(data));
         } catch (NumberFormatException e) {
-            System.err.println("IntData deserialize: data is not a number");
+            Logger.error("IntData deserialize: data is not a number");
             this.setData(0);
         } catch (NullPointerException e) {
-            System.err.println("IntData deserialize: data is null");
+            Logger.error("IntData deserialize: data is null");
             this.setData(0);
         }
     }

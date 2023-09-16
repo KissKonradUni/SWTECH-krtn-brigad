@@ -12,6 +12,15 @@ import hu.krtn.brigad.engine.ecs.EntityManager;
  */
 public class Query {
 
+    /**
+     * The possible query types.
+     */
+    private enum QueryType {
+        NAME,
+        KEYWORD,
+        COMPONENT
+    }
+
     private final QueryType type;
     private final String name;
     private final String componentType;

@@ -1,5 +1,7 @@
 package hu.krtn.brigad.engine.serialization.data;
 
+import hu.krtn.brigad.engine.window.Logger;
+
 /**
  * String data class for serialization of extra data that is not paired
  * to any component or entity.
@@ -30,7 +32,7 @@ public class StringData extends Data<String> {
         try {
             this.setData(data);
         } catch (NullPointerException e) {
-            System.err.println("StringData deserialize: data is null");
+            Logger.error("StringData deserialize: data is null");
             this.setData("");
         }
     }
