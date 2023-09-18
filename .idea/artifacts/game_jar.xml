@@ -1,24 +1,30 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="game:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/game_jar</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/game.jar</output-path>
     <root id="archive" name="game.jar">
       <element id="module-output" name="game" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-openal/3.3.2/lwjgl-openal-3.3.2-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.3.2/lwjgl-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.3.2/lwjgl-stb-3.3.2-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-annotations/2.15.2/jackson-annotations-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.15.2/jackson-core-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.3.2/lwjgl-opengl-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/de/javagl/jgltf-model/2.0.0/jgltf-model-2.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.3.2/lwjgl-opengl-3.3.2-natives-windows.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opencl/3.3.2/lwjgl-opencl-3.3.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.3.2/lwjgl-3.3.2-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-assimp/3.3.2/lwjgl-assimp-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.15.2/jackson-databind-2.15.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-assimp/3.3.2/lwjgl-assimp-3.3.2-natives-windows.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-fmod/3.3.2/lwjgl-fmod-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.3.2/lwjgl-3.3.2-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/de/javagl/jgltf-impl-v2/2.0.0/jgltf-impl-v2-2.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/de/javagl/jgltf-impl-v1/2.0.0/jgltf-impl-v1-2.0.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.3.2/lwjgl-stb-3.3.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.3.2/lwjgl-opengl-3.3.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.3.2/lwjgl-glfw-3.3.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/joml/joml/1.10.5/joml-1.10.5.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.3.2/lwjgl-opengl-3.3.2-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.3.2/lwjgl-stb-3.3.2-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.3.2/lwjgl-3.3.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-openal/3.3.2/lwjgl-openal-3.3.2-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-openal/3.3.2/lwjgl-openal-3.3.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-assimp/3.3.2/lwjgl-assimp-3.3.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.3.2/lwjgl-glfw-3.3.2-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-openal/3.3.2/lwjgl-openal-3.3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/joml/joml/1.10.5/joml-1.10.5.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

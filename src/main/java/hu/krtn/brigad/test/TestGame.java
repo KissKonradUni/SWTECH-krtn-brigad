@@ -1,14 +1,17 @@
 package hu.krtn.brigad.test;
 
 import hu.krtn.brigad.engine.ecs.EntityFactory;
+import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.ecs.component.RendererComponent;
 import hu.krtn.brigad.engine.ecs.component.TransformComponent;
-import hu.krtn.brigad.engine.io.ResourceManager;
+import hu.krtn.brigad.engine.rendering.Mesh;
+import hu.krtn.brigad.engine.resources.ResourceManager;
 import hu.krtn.brigad.engine.logic.LogicManager;
 import hu.krtn.brigad.engine.serialization.ExtraDataManager;
 import hu.krtn.brigad.engine.serialization.SaveManager;
 import hu.krtn.brigad.engine.serialization.data.IntData;
 import hu.krtn.brigad.engine.window.Window;
+import org.joml.Vector3f;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -20,29 +23,25 @@ public class TestGame {
         Window window = new Window(1920, 1080, "Test Game", 60.0f, true, false);
         window.init();
 
+        Mesh[] meshes = ResourceManager.getInstance().loadGlTF("./resources/models/test.gltf");
+
+        EntityFactory
+            .create("Camera")
+            .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f, 5.0f), new Vector3f(0.0f), new Vector3f(1.0f)))
+            .addComponent(new CameraComponent())
+            .buildAndRegister();
+
         EntityFactory
             .create("LocalPlayer")
             .addComponent(new TransformComponent())
             .addComponent(
                 new RendererComponent(
-                    new QuadMesh(),
+                    meshes[0],
                     ResourceManager.getInstance().loadShader(
                     "./resources/shaders/vertex/basic.glsl",
                     "./resources/shaders/fragment/unlit.glsl"
                     )
                 ))
-            .buildAndRegister();
-
-        for (int i = 0; i < 20; i++) {
-            EntityFactory
-                .create("RemotePlayer" + String.format("%02d", i))
-                .addComponent(new TransformComponent())
-                .buildAndRegister();
-        }
-
-        EntityFactory
-            .create("Bullet", false)
-            .addComponent(new TransformComponent())
             .buildAndRegister();
 
         LogicManager.getInstance().registerLogic(new TestLogic());

@@ -1,6 +1,7 @@
 package hu.krtn.brigad.test;
 
 import hu.krtn.brigad.engine.rendering.Mesh;
+import hu.krtn.brigad.engine.rendering.MeshLayout;
 
 public class QuadMesh extends Mesh {
 
@@ -16,7 +17,9 @@ public class QuadMesh extends Mesh {
     };
 
     public QuadMesh() {
-        super(vertices, indices, DrawTypes.STATIC_DRAW);
+        super(vertices, indices, new MeshLayout(new MeshLayout.AttributeTypes[]{
+            MeshLayout.AttributeTypes.VEC3
+        }), DrawTypes.STATIC_DRAW);
     }
 
 }

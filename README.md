@@ -9,16 +9,22 @@ Beadandó munka a Szoftvertechnológia nevű tárgyhoz
   - Kiss Konrád Soma
   - \<*reserved*\>
 
+
 - 🌐 <b>Nyelv: </b>
   - Java
 
+
 - 🛠️ Használt eszközök:
-  - IntelliJ IDEA
-  - Maven
+  - IntelliJ IDEA (Java IDE)
+  - Maven         (Függőség kezelő)
+  - Git           (Verziókezelő)
+
 
 - 📚 Használt könyvtárak:
-  - LWJGL
-  - Gson
+  - LWJGL (OpenGL használatához)
+  - Gson  (JSON fájlok kezeléséhez)
+  - JglTF (3D modellek kezeléséhez)
+
  
 - 📜 Licensz:
   - MIT

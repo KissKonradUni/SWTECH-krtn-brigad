@@ -1,5 +1,6 @@
 package hu.krtn.brigad.engine.rendering;
 
+import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.window.Logger;
 import org.joml.Matrix4f;
 
@@ -66,6 +67,10 @@ public class Shader {
         glUseProgram(handle);
         if (modelMatrixSupplier != null)
             glUniformMatrix4fv(glGetUniformLocation(handle, "model"), false, modelMatrixSupplier.get().get(new float[16]));
+        if (CameraComponent.getActiveCamera() != null) {
+            glUniformMatrix4fv(glGetUniformLocation(handle, "proj"), false, CameraComponent.getActiveCamera().getProjectionMatrix().get(new float[16]));
+            glUniformMatrix4fv(glGetUniformLocation(handle, "view"), false, CameraComponent.getActiveCamera().getViewMatrix().get(new float[16]));
+        }
     }
 
     public void unbind() {

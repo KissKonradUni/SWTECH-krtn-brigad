@@ -1,4 +1,4 @@
-package hu.krtn.brigad.engine.io;
+package hu.krtn.brigad.engine.resources;
 
 import java.util.HashMap;
 
