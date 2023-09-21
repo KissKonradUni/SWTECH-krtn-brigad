@@ -2,6 +2,7 @@ package hu.krtn.brigad.test;
 
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.component.RendererComponent;
+import hu.krtn.brigad.engine.ecs.component.TransformComponent;
 import hu.krtn.brigad.engine.logic.Logic;
 import hu.krtn.brigad.engine.logic.Query;
 
@@ -21,9 +22,11 @@ public class RendererLogic extends Logic {
     @Override
     protected void render(Entity[] queryTargets, float deltaTime) {
         for (Entity entity : queryTargets) {
-            RendererComponent rendererComponent = (RendererComponent) entity.getComponent(RendererComponent.class);
+            RendererComponent  rendererComponent  = (RendererComponent)  entity.getComponent(RendererComponent.class);
+            TransformComponent transformComponent = (TransformComponent) entity.getComponent(TransformComponent.class);
+
             rendererComponent.getMesh().bind();
-            rendererComponent.getShader().bind();
+            rendererComponent.getShader().bind(transformComponent::getModelMatrix);
 
             glDrawElements(GL_TRIANGLES, rendererComponent.getMesh().getIndexCount(), GL_UNSIGNED_INT, 0);
         }

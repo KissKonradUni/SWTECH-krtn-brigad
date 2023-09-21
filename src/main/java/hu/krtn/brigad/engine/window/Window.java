@@ -10,13 +10,15 @@ import java.nio.IntBuffer;
 import java.util.Locale;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 /**
  * The main window of the game.
  */
 public class Window {
+
+    private static Window INSTANCE;
 
     /**
      * A separate thread that runs the game logic.
@@ -127,6 +129,7 @@ public class Window {
     private float tickRate;
     private boolean vsync;
     private boolean fullscreen;
+    private int msaa = 0;
 
     /**
      * Creates a new window with the given width, height and title.
@@ -138,13 +141,41 @@ public class Window {
      * @param vsync Whether the window should use vsync or not.
      * @param fullscreen Whether the window should be fullscreen or not.
      */
-    public Window(int width, int height, String title, float tickRate, boolean vsync, boolean fullscreen) {
+    private Window(int width, int height, String title, float tickRate, boolean vsync, boolean fullscreen, int msaa) {
         this.width = width;
         this.height = height;
         this.title = title;
         this.tickRate = tickRate;
         this.vsync = vsync;
         this.fullscreen = fullscreen;
+        this.msaa = msaa;
+    }
+
+    /**
+     * Initializes the window instance.
+     * @param width The width of the window.
+     * @param height The height of the window.
+     * @param title The title of the window.
+     * @param tickRate The rate at which the logic thread runs per second.
+     * @param vsync Whether the window should use vsync or not.
+     * @param fullscreen Whether the window should be fullscreen or not.
+     * @return The initialized window instance.
+     */
+    public static Window initInstance(int width, int height, String title, float tickRate, boolean vsync, boolean fullscreen, int msaa) {
+        if (INSTANCE == null) {
+            INSTANCE = new Window(width, height, title, tickRate, vsync, fullscreen, msaa);
+        } else {
+            Logger.error("Window already initialized");
+        }
+        return INSTANCE;
+    }
+
+    /**
+     * Returns the instance of the window.
+     * @return The instance of the window.
+     */
+    public static Window getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -176,6 +207,7 @@ public class Window {
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_SAMPLES, msaa);
 
         // Create the window
         // Set the window to fullscreen if needed
@@ -223,12 +255,19 @@ public class Window {
      * The main rendering loop of the game.
      */
     private void loop() {
-        // Set the clear color to red
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        // Clear the color and depth buffers
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         float lastFrameTime    = 0.0f;
         float currentFrameTime = 0.0f;
         float deltaTime        = 0.0f;
+
+        // enable depth testing
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        if (msaa > 0)
+            glEnable(GL_MULTISAMPLE);
 
         while (!glfwWindowShouldClose(windowHandle)) {
             // Clear the color and depth buffers
@@ -274,6 +313,10 @@ public class Window {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public float getAspectRatio() {
+        return (float) width / height;
     }
 
 }

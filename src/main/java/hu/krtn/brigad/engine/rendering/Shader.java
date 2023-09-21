@@ -4,11 +4,14 @@ import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.window.Logger;
 import org.joml.Matrix4f;
 
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 import static org.lwjgl.opengl.GL32.*;
 
 public class Shader {
+
+    private static int activeShader = -1;
 
     public enum ShaderTypes {
         VERTEX_SHADER(GL_VERTEX_SHADER),
@@ -28,7 +31,7 @@ public class Shader {
 
     private final int handle;
 
-    private Supplier<Matrix4f> modelMatrixSupplier;
+    private final HashMap<String, Integer> uniforms = new HashMap<>();
 
     public Shader(String vertexShader, String fragmentShader) {
         handle = glCreateProgram();
@@ -63,13 +66,17 @@ public class Shader {
         return shader;
     }
 
-    public void bind() {
-        glUseProgram(handle);
+    public void bind(Supplier<Matrix4f> modelMatrixSupplier) {
+        if (activeShader != handle) {
+            glUseProgram(handle);
+            activeShader = handle;
+        }
         if (modelMatrixSupplier != null)
-            glUniformMatrix4fv(glGetUniformLocation(handle, "model"), false, modelMatrixSupplier.get().get(new float[16]));
-        if (CameraComponent.getActiveCamera() != null) {
-            glUniformMatrix4fv(glGetUniformLocation(handle, "proj"), false, CameraComponent.getActiveCamera().getProjectionMatrix().get(new float[16]));
-            glUniformMatrix4fv(glGetUniformLocation(handle, "view"), false, CameraComponent.getActiveCamera().getViewMatrix().get(new float[16]));
+            glUniformMatrix4fv(getUniformLocation("model"), false, modelMatrixSupplier.get().get(new float[16]));
+        CameraComponent camera = CameraComponent.getActiveCamera();
+        if (camera != null) {
+            glUniformMatrix4fv(getUniformLocation("proj"), false, camera.getProjectionMatrix().get(new float[16]));
+            glUniformMatrix4fv(getUniformLocation("view"), false, camera.getViewMatrix().get(new float[16]));
         }
     }
 
@@ -81,7 +88,12 @@ public class Shader {
         glDeleteProgram(handle);
     }
 
-    public void setModelMatrixSupplier(Supplier<Matrix4f> modelMatrixSupplier) {
-        this.modelMatrixSupplier = modelMatrixSupplier;
+    public int getUniformLocation(String name) {
+        if (uniforms.containsKey(name)) {
+            return uniforms.get(name);
+        }
+        int loc = glGetUniformLocation(handle, name);
+        uniforms.put(name, loc);
+        return loc;
     }
 }

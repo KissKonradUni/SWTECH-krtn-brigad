@@ -59,6 +59,5 @@ public class RendererComponent extends Component {
         if (tc == null) {
             throw new ComponentDependencyException(TransformComponent.class);
         }
-        shader.setModelMatrixSupplier(tc::getModelMatrix);
     }
 }

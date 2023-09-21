@@ -1,7 +1,5 @@
 package hu.krtn.brigad.engine.rendering;
 
-import hu.krtn.brigad.engine.window.Logger;
-
 import static org.lwjgl.opengl.GL30.*;
 
 public class Mesh {
@@ -47,7 +45,7 @@ public class Mesh {
 
         int pointer = 0;
         for (int i = 0; i < layout.getAttributeSize(); i++) {
-            glVertexAttribPointer(i, layout.getAttributeCount(i), GL_FLOAT, false, 0, pointer);
+            glVertexAttribPointer(i, layout.getAttributeCount(i), GL_FLOAT, false, layout.getStride(), pointer);
             pointer += layout.getAttributeSize(i);
             glEnableVertexAttribArray(i);
         }

@@ -20,10 +20,11 @@ import java.io.IOException;
 public class TestGame {
 
     public static void main(String[] args) {
-        Window window = new Window(1920, 1080, "Test Game", 60.0f, true, false);
+        Window window = Window.initInstance(1920, 1080, "Test Game", 60.0f, true, false, 4);
         window.init();
 
-        Mesh[] meshes = ResourceManager.getInstance().loadGlTF("./resources/models/test.gltf");
+        Mesh[] monke = ResourceManager.getInstance().loadStaticModel("./resources/models/monke.gltf");
+        Mesh[] cage  = ResourceManager.getInstance().loadStaticModel("./resources/models/cage.gltf");
 
         EntityFactory
             .create("Camera")
@@ -33,19 +34,33 @@ public class TestGame {
 
         EntityFactory
             .create("LocalPlayer")
-            .addComponent(new TransformComponent())
+            .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f, -5.0f), new Vector3f(0.0f), new Vector3f(1.0f)))
             .addComponent(
                 new RendererComponent(
-                    meshes[0],
+                    monke[0],
                     ResourceManager.getInstance().loadShader(
                     "./resources/shaders/vertex/basic.glsl",
-                    "./resources/shaders/fragment/unlit.glsl"
+                    "./resources/shaders/fragment/diffuse.glsl"
+                    )
+                ))
+            .buildAndRegister();
+
+        EntityFactory
+            .create("Cage")
+            .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f, -5.0f), new Vector3f(0.0f), new Vector3f(5.0f)))
+            .addComponent(
+                new RendererComponent(
+                    cage[0],
+                    ResourceManager.getInstance().loadShader(
+                    "./resources/shaders/vertex/basic.glsl",
+                    "./resources/shaders/fragment/diffuse.glsl"
                     )
                 ))
             .buildAndRegister();
 
         LogicManager.getInstance().registerLogic(new TestLogic());
         LogicManager.getInstance().registerLogic(new RendererLogic());
+        LogicManager.getInstance().registerLogic(new CageLogic());
 
         ExtraDataManager.getInstance().registerData("High-score", new IntData(54212));
 

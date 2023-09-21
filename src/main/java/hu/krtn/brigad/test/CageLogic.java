@@ -6,10 +6,10 @@ import hu.krtn.brigad.engine.logic.Logic;
 import hu.krtn.brigad.engine.logic.Query;
 import org.joml.Vector3f;
 
-public class TestLogic extends Logic {
+public class CageLogic extends Logic {
 
-    public TestLogic() {
-        super(new Query("LocalPlayer"));
+    public CageLogic() {
+        super(new Query("Cage"));
     }
 
     @Override
@@ -22,8 +22,7 @@ public class TestLogic extends Logic {
     @Override
     protected void render(Entity[] queryTargets, float deltaTime) {
         TransformComponent component = (TransformComponent) queryTargets[0].getComponent(TransformComponent.class);
-        component.setRotation(component.getRotation().add(0.0f, 10.0f * deltaTime, 0.0f));
-        component.setPosition(new Vector3f(0.0f, (float) Math.sin(time), -5.0f));
+        component.setRotation(component.getRotation().add(0.0f, -10.0f * deltaTime, 0.0f));
         time += deltaTime;
     }
 

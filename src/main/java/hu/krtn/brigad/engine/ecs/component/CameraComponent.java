@@ -3,6 +3,7 @@ package hu.krtn.brigad.engine.ecs.component;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
+import hu.krtn.brigad.engine.window.Window;
 import org.joml.Matrix4f;
 
 public class CameraComponent extends Component {
@@ -19,7 +20,9 @@ public class CameraComponent extends Component {
 
     public CameraComponent() {
         super();
-        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(FOV), 1.0f, nearPlane, farPlane);
+        float aspectRatio = Window.getInstance().getAspectRatio();
+
+        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(FOV), aspectRatio, nearPlane, farPlane);
 
         if (activeCamera == null) {
             activeCamera = this;

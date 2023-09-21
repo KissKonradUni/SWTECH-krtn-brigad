@@ -1,29 +1,25 @@
 package hu.krtn.brigad.engine.resources;
 
-import de.javagl.jgltf.impl.v2.Accessor;
-import de.javagl.jgltf.impl.v2.GlTF;
-import de.javagl.jgltf.impl.v2.MeshPrimitive;
-import de.javagl.jgltf.model.GltfModel;
-import de.javagl.jgltf.model.io.GltfAsset;
-import de.javagl.jgltf.model.io.GltfAssetReader;
-import hu.krtn.brigad.engine.rendering.Mesh;
-import hu.krtn.brigad.engine.rendering.MeshLayout;
-import hu.krtn.brigad.engine.rendering.Shader;
+import hu.krtn.brigad.engine.rendering.*;
 import hu.krtn.brigad.engine.window.Logger;
+import org.joml.Vector4f;
+import org.lwjgl.assimp.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ResourceManager {
 
     private static final ResourceCache<Shader> shaderCache = new ResourceCache<>();
+    private static final ResourceCache<Texture> textureCache = new ResourceCache<>();
 
     private static ResourceManager INSTANCE;
 
@@ -57,6 +53,16 @@ public class ResourceManager {
         return result.toString();
     }
 
+    public ByteBuffer readBinaryFile(String path) {
+        File file = new File(path);
+        try {
+            return ByteBuffer.wrap(Files.readAllBytes(file.toPath()));
+        } catch (IOException e) {
+            Logger.error("File not found: " + path);
+            return null;
+        }
+    }
+
     public Shader loadShader(String vertexShaderPath, String fragmentShaderPath) {
         if (shaderCache.has(vertexShaderPath + "|" + fragmentShaderPath)) {
             return shaderCache.get(vertexShaderPath + "|" + fragmentShaderPath);
@@ -70,107 +76,141 @@ public class ResourceManager {
         return shader;
     }
 
-    public Mesh[] loadGlTF(String path) {
-        GltfAssetReader gltfAssetReader = new GltfAssetReader();
-        GltfAsset gltfAsset;
-        try {
-            gltfAsset = gltfAssetReader.read(Path.of(path).toUri());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (gltfAsset == null) {
-            Logger.error("Failed to load glTF asset: " + path);
+    private Texture loadTexture(String texturePath) {
+        // TODO: Implement texture loading
+
+        return null;
+    }
+
+    public Mesh[] loadStaticModel(String path) {
+        String absolutePath = new File(path).getAbsolutePath();
+
+        Mesh[] meshes;
+        try (AIScene scene = Assimp.aiImportFile(absolutePath, Assimp.aiProcess_Triangulate | Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_FixInfacingNormals)) {
+            if (scene == null) {
+                Logger.error("Error loading model: " + path);
+                return null;
+            }
+
+            int materialCount = scene.mNumMaterials();
+            for (int i = 0; i < materialCount; i++) {
+                try (AIMaterial material = AIMaterial.create(scene.mMaterials().get(i))) {
+                    processMaterial(material);
+                }
+            }
+
+            int meshCount = scene.mNumMeshes();
+            meshes = new Mesh[meshCount];
+            for (int i = 0; i < meshCount; i++) {
+                try (AIMesh mesh = AIMesh.create(scene.mMeshes().get(i))) {
+                    meshes[i] = processMesh(mesh);
+                }
+            }
+        } catch (Exception e) {
+            Logger.error("Error loading model: " + path);
             return null;
         }
 
-        ArrayList<Mesh> result = new ArrayList<>();
-
-        GlTF gltf = (GlTF) gltfAsset.getGltf();
-        gltf.getMeshes().forEach(mesh -> {
-            result.add(loadMesh(gltf, mesh));
-        });
-
-        return result.toArray(new Mesh[0]);
+        return meshes;
     }
 
-    private Mesh loadMesh(GlTF gltf, de.javagl.jgltf.impl.v2.Mesh mesh) {
-        Primitive primitive = loadPrimitive(gltf, mesh.getPrimitives().get(0));
-        return new Mesh(primitive.getVertices(), primitive.getIndices(), primitive.getLayout(), Mesh.DrawTypes.STATIC_DRAW);
+    private Material processMaterial(AIMaterial material) {
+        AIColor4D color = AIColor4D.create();
+
+        AIString path = AIString.calloc();
+        Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
+        String texturePath = path.dataString();
+        if (!texturePath.isEmpty()) {
+            Texture texture = loadTexture(texturePath);
+        }
+
+        Vector4f ambient = new Vector4f(1.0f);
+        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_COLOR_AMBIENT, Assimp.aiTextureType_NONE, 0, color) == 0) {
+            ambient = new Vector4f(color.r(), color.g(), color.b(), color.a());
+        }
+
+        Vector4f diffuse = new Vector4f(1.0f);
+        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_COLOR_DIFFUSE, Assimp.aiTextureType_NONE, 0, color) == 0) {
+            diffuse = new Vector4f(color.r(), color.g(), color.b(), color.a());
+        }
+
+        Vector4f specular = new Vector4f(1.0f);
+        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_COLOR_SPECULAR, Assimp.aiTextureType_NONE, 0, color) == 0) {
+            specular = new Vector4f(color.r(), color.g(), color.b(), color.a());
+        }
+
+        return new Material(ambient, diffuse, specular, 0.5f);
     }
 
-    private static class Primitive {
-        private final int[] indices;
-        private final float[] vertices;
-        private final MeshLayout layout;
+    private Mesh processMesh(AIMesh mesh) {
+        ArrayList<Float> vertices  = new ArrayList<>();
+        ArrayList<Float> uvs       = new ArrayList<>();
+        ArrayList<Float> normals   = new ArrayList<>();
+        ArrayList<Integer> indices = new ArrayList<>();
 
-        public Primitive(int[] indices, float[] vertices, MeshLayout layout) {
-            this.indices = indices;
-            this.vertices = vertices;
-            this.layout = layout;
+        AIVector3D.Buffer aiVertices = mesh.mVertices();
+        while (aiVertices.remaining() > 0) {
+            AIVector3D aiVertex = aiVertices.get();
+            vertices.add(aiVertex.x());
+            vertices.add(aiVertex.y());
+            vertices.add(aiVertex.z());
         }
 
-        public int[] getIndices() {
-            return indices;
+        AIVector3D.Buffer aiUVs = mesh.mTextureCoords(0);
+        while (aiUVs != null && aiUVs.remaining() > 0) {
+            AIVector3D aiUV = aiUVs.get();
+            uvs.add(aiUV.x());
+            uvs.add(aiUV.y());
         }
 
-        public float[] getVertices() {
-            return vertices;
+        AIVector3D.Buffer aiNormals = mesh.mNormals();
+        while (aiNormals != null && aiNormals.remaining() > 0) {
+            AIVector3D aiNormal = aiNormals.get();
+            normals.add(aiNormal.x());
+            normals.add(aiNormal.y());
+            normals.add(aiNormal.z());
         }
 
-        public MeshLayout getLayout() {
-            return layout;
-        }
-    }
-
-    private Primitive loadPrimitive(GlTF gltf, MeshPrimitive primitive) {
-        Map<String, Integer> attributes = primitive.getAttributes();
-        int indices = primitive.getIndices();
-
-        ArrayList<String> accessorTypes = gltf.getAccessors().stream().map(
-            accessor -> accessor.getBufferView() + "|" + accessor.getType()
-        ).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<MeshLayout.AttributeTypes> attributeTypes = new ArrayList<>();
-        accessorTypes.forEach( accessorType -> {
-            String[] split = accessorType.split("\\|");
-            String type = split[1];
-            switch (type) {
-                case "SCALAR" -> attributeTypes.add(MeshLayout.AttributeTypes.SCALAR);
-                case "FLOAT" -> attributeTypes. add(MeshLayout.AttributeTypes.FLOAT);
-                case "VEC2" -> attributeTypes.  add(MeshLayout.AttributeTypes.VEC2);
-                case "VEC3" -> attributeTypes.  add(MeshLayout.AttributeTypes.VEC3);
-                case "VEC4" -> attributeTypes.  add(MeshLayout.AttributeTypes.VEC4);
-                case "MAT4" -> attributeTypes.  add(MeshLayout.AttributeTypes.MAT4);
+        AIFace.Buffer aiFaces = mesh.mFaces();
+        while (aiFaces.remaining() > 0) {
+            AIFace aiFace = aiFaces.get();
+            IntBuffer buffer = aiFace.mIndices();
+            while (buffer.remaining() > 0) {
+                indices.add(buffer.get());
             }
-        });
-        attributeTypes.remove(3); // remove the indices
-
-        String base64Data = gltf.getBuffers().get(0).getUri().split(",")[1];
-        byte[] data = Base64.getDecoder().decode(base64Data);
-        // convert to int array
-        int[] intData = new int[data.length];
-        for (int i = 0; i < data.length; i++) {
-            intData[i] = data[i] & 0xFF;
         }
 
-        int indicesOffset = gltf.getBufferViews().get(indices).getByteOffset();
-        int indicesLength = gltf.getBufferViews().get(indices).getByteLength();
+        FloatBuffer combinedBuffer = FloatBuffer.allocate(vertices.size() / 3 * 8);
+        for (int i = 0; i < vertices.size() / 3; i++) {
+            combinedBuffer.put(vertices.get(i * 3));
+            combinedBuffer.put(vertices.get(i * 3 + 1));
+            combinedBuffer.put(vertices.get(i * 3 + 2));
 
-        float[] verticesData = new float[(intData.length - indicesLength) / 4];
-        for (int i = 0; i < verticesData.length; i++) {
-            verticesData[i] = Float.intBitsToFloat(
-                (intData[i * 4]) |
-                (intData[i * 4 + 1] << 8) |
-                (intData[i * 4 + 2] << 16) |
-                (intData[i * 4 + 3] << 24)
-            );
+            if (uvs.isEmpty()) {
+                combinedBuffer.put(0.0f);
+                combinedBuffer.put(0.0f);
+            } else {
+                combinedBuffer.put(uvs.get(i * 2));
+                combinedBuffer.put(uvs.get(i * 2 + 1));
+            }
+
+            combinedBuffer.put(normals.get(i * 3));
+            combinedBuffer.put(normals.get(i * 3 + 1));
+            combinedBuffer.put(normals.get(i * 3 + 2));
         }
 
-        int[] indicesData = new int[indicesLength / 2];
-        for (int i = 0; i < indicesLength / 2; i++) {
-            indicesData[i] = (intData[indicesOffset + i * 2]) | (intData[indicesOffset + i * 2 + 1] << 8);
+        IntBuffer indicesBuffer = IntBuffer.allocate(indices.size());
+        for (Integer index : indices) {
+            indicesBuffer.put(index);
         }
 
-        return new Primitive(indicesData, verticesData, new MeshLayout(attributeTypes.toArray(new MeshLayout.AttributeTypes[0])));
+        return new Mesh(combinedBuffer.array(), indicesBuffer.array(), new MeshLayout(
+            new MeshLayout.AttributeTypes[] {
+                    MeshLayout.AttributeTypes.VEC3,
+                    MeshLayout.AttributeTypes.VEC2,
+                    MeshLayout.AttributeTypes.VEC3
+            }
+        ), Mesh.DrawTypes.STATIC_DRAW);
     }
 
 }
