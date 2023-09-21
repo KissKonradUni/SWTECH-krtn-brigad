@@ -16,6 +16,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * A singleton class for managing resources.
+ */
 public class ResourceManager {
 
     private static final ResourceCache<Shader> shaderCache = new ResourceCache<>();
@@ -33,6 +36,11 @@ public class ResourceManager {
         return INSTANCE;
     }
 
+    /**
+     * Reads a text file and returns its contents as a string.
+     * @param path The path of the file.
+     * @return The contents of the file.
+     */
     public String readTextFile(String path) {
         StringBuilder result = new StringBuilder();
 
@@ -53,6 +61,11 @@ public class ResourceManager {
         return result.toString();
     }
 
+    /**
+     * Reads a binary file and returns its contents as a byte buffer.
+     * @param path The path of the file.
+     * @return The contents of the file.
+     */
     public ByteBuffer readBinaryFile(String path) {
         File file = new File(path);
         try {
@@ -63,6 +76,12 @@ public class ResourceManager {
         }
     }
 
+    /**
+     * Loads a shader from the given paths.
+     * @param vertexShaderPath The path of the vertex shader.
+     * @param fragmentShaderPath The path of the fragment shader.
+     * @return The shader.
+     */
     public Shader loadShader(String vertexShaderPath, String fragmentShaderPath) {
         if (shaderCache.has(vertexShaderPath + "|" + fragmentShaderPath)) {
             return shaderCache.get(vertexShaderPath + "|" + fragmentShaderPath);
@@ -76,12 +95,22 @@ public class ResourceManager {
         return shader;
     }
 
+    /**
+     * Loads a texture from the given path.
+     * @param texturePath The path of the texture.
+     * @return The texture.
+     */
     private Texture loadTexture(String texturePath) {
         // TODO: Implement texture loading
 
         return null;
     }
 
+    /**
+     * Loads a static model from the given path.
+     * @param path The path of the model.
+     * @return The meshes of the model.
+     */
     public Mesh[] loadStaticModel(String path) {
         String absolutePath = new File(path).getAbsolutePath();
 
@@ -114,6 +143,11 @@ public class ResourceManager {
         return meshes;
     }
 
+    /**
+     * Processes a material that was loaded from a model.
+     * @param material The loaded material.
+     * @return The processed material.
+     */
     private Material processMaterial(AIMaterial material) {
         AIColor4D color = AIColor4D.create();
 
@@ -142,6 +176,11 @@ public class ResourceManager {
         return new Material(ambient, diffuse, specular, 0.5f);
     }
 
+    /**
+     * Processes a mesh that was loaded from a model.
+     * @param mesh The loaded mesh.
+     * @return The processed mesh.
+     */
     private Mesh processMesh(AIMesh mesh) {
         ArrayList<Float> vertices  = new ArrayList<>();
         ArrayList<Float> uvs       = new ArrayList<>();

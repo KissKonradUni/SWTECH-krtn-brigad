@@ -2,6 +2,10 @@ package hu.krtn.brigad.engine.resources;
 
 import java.util.HashMap;
 
+/**
+ * A generic resource cache.
+ * @param <T> The type of the resource.
+ */
 public class ResourceCache<T> {
 
     private final HashMap<String, T> resources;

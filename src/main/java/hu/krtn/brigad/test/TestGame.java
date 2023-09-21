@@ -59,7 +59,6 @@ public class TestGame {
             .buildAndRegister();
 
         LogicManager.getInstance().registerLogic(new TestLogic());
-        LogicManager.getInstance().registerLogic(new RendererLogic());
         LogicManager.getInstance().registerLogic(new CageLogic());
 
         ExtraDataManager.getInstance().registerData("High-score", new IntData(54212));

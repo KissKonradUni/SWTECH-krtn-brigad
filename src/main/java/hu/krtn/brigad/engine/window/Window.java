@@ -140,6 +140,7 @@ public class Window {
      *                 This value should be greater than 0.
      * @param vsync Whether the window should use vsync or not.
      * @param fullscreen Whether the window should be fullscreen or not.
+     * @param msaa The number of samples to use for multisample antialiasing.
      */
     private Window(int width, int height, String title, float tickRate, boolean vsync, boolean fullscreen, int msaa) {
         this.width = width;
@@ -159,6 +160,7 @@ public class Window {
      * @param tickRate The rate at which the logic thread runs per second.
      * @param vsync Whether the window should use vsync or not.
      * @param fullscreen Whether the window should be fullscreen or not.
+     * @param msaa The number of samples to use for multisample antialiasing.
      * @return The initialized window instance.
      */
     public static Window initInstance(int width, int height, String title, float tickRate, boolean vsync, boolean fullscreen, int msaa) {

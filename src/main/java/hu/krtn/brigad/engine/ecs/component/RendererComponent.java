@@ -3,19 +3,33 @@ package hu.krtn.brigad.engine.ecs.component;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
+import hu.krtn.brigad.engine.logic.LogicManager;
 import hu.krtn.brigad.engine.rendering.Mesh;
 import hu.krtn.brigad.engine.rendering.Shader;
+import hu.krtn.brigad.engine.rendering.RendererLogic;
 
+/**
+ * The renderer component is used to render meshes.
+ * It contains a mesh and a shader.
+ */
 public class RendererComponent extends Component {
 
     //TODO: Implement file system capabilities
     private final Mesh mesh;
     private final Shader shader;
 
+    /**
+     * The constructor of the renderer component.
+     * @param mesh The mesh to be rendered.
+     * @param shader The shader to be used to render the mesh.
+     */
     public RendererComponent(Mesh mesh, Shader shader) {
         super();
         this.mesh = mesh;
         this.shader = shader;
+
+        if (!LogicManager.getInstance().isLogicPresent(RendererLogic.class))
+            LogicManager.getInstance().registerLogic(new RendererLogic());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package hu.krtn.brigad.test;
+package hu.krtn.brigad.engine.rendering;
 
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.component.RendererComponent;
@@ -8,6 +8,11 @@ import hu.krtn.brigad.engine.logic.Query;
 
 import static org.lwjgl.opengl.GL11.*;
 
+/**
+ * Built-in logic for rendering entities with a renderer component.
+ * It is automatically registered when a renderer component is created.
+ * @see RendererComponent
+ */
 public class RendererLogic extends Logic {
 
     public RendererLogic() {

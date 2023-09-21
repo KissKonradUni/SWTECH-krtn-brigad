@@ -23,7 +23,6 @@ Beadandó munka a Szoftvertechnológia nevű tárgyhoz
 - 📚 Használt könyvtárak:
   - LWJGL (OpenGL használatához)
   - Gson  (JSON fájlok kezeléséhez)
-  - JglTF (3D modellek kezeléséhez)
 
  
 - 📜 Licensz:

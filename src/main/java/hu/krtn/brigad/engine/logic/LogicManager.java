@@ -72,4 +72,19 @@ public class LogicManager {
         logics.clear();
     }
 
+    /**
+     * Checks if a {@link Logic} object is registered.
+     * @param classQuery The {@link Logic} object to check.
+     * @return Whether the {@link Logic} object is registered or not.
+     */
+    public boolean isLogicPresent(Class<? extends Logic> classQuery) {
+        boolean result = false;
+        for (Logic logic : logics) {
+            if (logic.getClass().equals(classQuery)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 }

@@ -2,6 +2,10 @@ package hu.krtn.brigad.engine.rendering;
 
 import org.joml.Vector4f;
 
+/**
+ * Holds the material properties of a mesh.
+ */
+// TODO: Implement this class.
 public class Material {
 
     private Vector4f ambient;

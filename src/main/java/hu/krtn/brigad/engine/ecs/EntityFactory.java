@@ -53,10 +53,21 @@ public class EntityFactory {
         return entity.getComponent(transformComponentClass);
     }
 
+    /**
+     * Creates a new Entity with the given name.
+     * @param name The name of the entity.
+     * @return The EntityFactory instance.
+     */
     public static EntityFactory create(String name) {
         return new EntityFactory(name, true);
     }
 
+    /**
+     * Creates a new Entity with the given name and persistence.
+     * @param name The name of the entity.
+     * @param persistent Whether the entity should be persistent or not.
+     * @return The EntityFactory instance.
+     */
     public static EntityFactory create(String name, boolean persistent) {
         return new EntityFactory(name, persistent);
     }
