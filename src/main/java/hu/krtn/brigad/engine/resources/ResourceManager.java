@@ -12,7 +12,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -106,15 +105,25 @@ public class ResourceManager {
         return null;
     }
 
+    public static class StaticModelData {
+        public Mesh mesh;
+        public Material material;
+
+        public StaticModelData(Mesh mesh, Material material) {
+            this.mesh = mesh;
+            this.material = material;
+        }
+    }
+
     /**
      * Loads a static model from the given path.
      * @param path The path of the model.
      * @return The meshes of the model.
      */
-    public Mesh[] loadStaticModel(String path) {
+    public StaticModelData[] loadStaticModel(String path) {
         String absolutePath = new File(path).getAbsolutePath();
 
-        Mesh[] meshes;
+        StaticModelData[] result;
         try (AIScene scene = Assimp.aiImportFile(absolutePath, Assimp.aiProcess_Triangulate | Assimp.aiProcess_JoinIdenticalVertices | Assimp.aiProcess_FixInfacingNormals)) {
             if (scene == null) {
                 Logger.error("Error loading model: " + path);
@@ -122,25 +131,32 @@ public class ResourceManager {
             }
 
             int materialCount = scene.mNumMaterials();
+            Material[] materials = new Material[materialCount];
             for (int i = 0; i < materialCount; i++) {
                 try (AIMaterial material = AIMaterial.create(scene.mMaterials().get(i))) {
-                    processMaterial(material);
+                    materials[i] = processMaterial(material);
                 }
             }
 
             int meshCount = scene.mNumMeshes();
-            meshes = new Mesh[meshCount];
+            Mesh[] meshes = new Mesh[meshCount];
+            int[]  materialIndices = new int[meshCount];
             for (int i = 0; i < meshCount; i++) {
                 try (AIMesh mesh = AIMesh.create(scene.mMeshes().get(i))) {
                     meshes[i] = processMesh(mesh);
+                    materialIndices[i] = mesh.mMaterialIndex();
                 }
             }
+
+            result = new StaticModelData[meshCount];
+            for (int i = 0; i < meshes.length; i++) {
+                result[i] = new StaticModelData(meshes[i], materials[materialIndices[i]]);
+            }
+            return result;
         } catch (Exception e) {
             Logger.error("Error loading model: " + path);
             return null;
         }
-
-        return meshes;
     }
 
     /**
@@ -151,29 +167,31 @@ public class ResourceManager {
     private Material processMaterial(AIMaterial material) {
         AIColor4D color = AIColor4D.create();
 
+        /*
         AIString path = AIString.calloc();
         Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
         String texturePath = path.dataString();
         if (!texturePath.isEmpty()) {
             Texture texture = loadTexture(texturePath);
         }
+        */
 
-        Vector4f ambient = new Vector4f(1.0f);
-        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_COLOR_AMBIENT, Assimp.aiTextureType_NONE, 0, color) == 0) {
-            ambient = new Vector4f(color.r(), color.g(), color.b(), color.a());
+        Vector4f baseColor = new Vector4f(1.0f);
+        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_BASE_COLOR, Assimp.aiTextureType_NONE, 0, color) == 0) {
+            baseColor = new Vector4f(color.r(), color.g(), color.b(), color.a());
         }
 
-        Vector4f diffuse = new Vector4f(1.0f);
-        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_COLOR_DIFFUSE, Assimp.aiTextureType_NONE, 0, color) == 0) {
-            diffuse = new Vector4f(color.r(), color.g(), color.b(), color.a());
+        float metallic = 0.5f;
+        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_METALLIC_FACTOR, Assimp.aiTextureType_NONE, 0, color) == 0) {
+            metallic = color.r();
         }
 
-        Vector4f specular = new Vector4f(1.0f);
-        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_COLOR_SPECULAR, Assimp.aiTextureType_NONE, 0, color) == 0) {
-            specular = new Vector4f(color.r(), color.g(), color.b(), color.a());
+        float roughness = 0.5f;
+        if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_ROUGHNESS_FACTOR, Assimp.aiTextureType_NONE, 0, color) == 0) {
+            roughness = color.r();
         }
 
-        return new Material(ambient, diffuse, specular, 0.5f);
+        return new Material(baseColor, metallic, roughness);
     }
 
     /**

@@ -284,13 +284,13 @@ public class Window {
             lastFrameTime = currentFrameTime;
 
             // Set the window title
-            glfwSetWindowTitle(
+            /*glfwSetWindowTitle(
                     windowHandle,
                     title +
                         " | FPS: " + String.format(Locale.ENGLISH, "%06.2f", 1.0f / deltaTime) +
                         " | UPS: " + String.format(Locale.ENGLISH, "%04.1f", 1.0f / logicThread.getDeltaTime()) +
                         "/" + logicThread.getTickRate()
-            );
+            );*/
 
             // Swap the front and back buffers
             glfwSwapBuffers(windowHandle);

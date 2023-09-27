@@ -18,6 +18,22 @@
             "name" : "Icosphere"
         }
     ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "Material",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.5982688069343567,
+                    0.5652298927307129,
+                    0.8000000715255737,
+                    1
+                ],
+                "metallicFactor" : 0.9721115827560425,
+                "roughnessFactor" : 0.22111552953720093
+            }
+        }
+    ],
     "meshes" : [
         {
             "name" : "Icosphere.002",
@@ -28,7 +44,8 @@
                         "TEXCOORD_0" : 1,
                         "NORMAL" : 2
                     },
-                    "indices" : 3
+                    "indices" : 3,
+                    "material" : 0
                 }
             ]
         }

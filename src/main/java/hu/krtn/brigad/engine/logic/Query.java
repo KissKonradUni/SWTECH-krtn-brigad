@@ -4,6 +4,9 @@ import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.EntityManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * A query is a way to find entities in the entity manager.
  * <li>Query by name: finds entities by their name.</li>
@@ -23,7 +26,7 @@ public class Query {
 
     private final QueryType type;
     private final String name;
-    private final String componentType;
+    private final String[] componentTypes;
 
     /**
      * The result of the last query.
@@ -39,7 +42,7 @@ public class Query {
     public Query(String name, boolean keyword) {
         this.type = keyword ? QueryType.KEYWORD : QueryType.NAME;
         this.name = name;
-        this.componentType = null;
+        this.componentTypes = null;
     }
 
     /**
@@ -52,12 +55,13 @@ public class Query {
 
     /**
      * Creates a query by component.
-     * @param component The component type to search for.
+     * Can have multiple component types.
+     * * @param component The component type to search for.
      */
-    public Query(Class<? extends Component> component) {
+    public Query(Class<? extends Component>[] components) {
         this.type = QueryType.COMPONENT;
         this.name = null;
-        this.componentType = component.getCanonicalName();
+        this.componentTypes = Arrays.stream(components).map(Class::getCanonicalName).toArray(String[]::new);
     }
 
     /**
@@ -84,7 +88,11 @@ public class Query {
     }
 
     private Entity[] queryByComponent() {
-        return EntityManager.getInstance().queryEntitiesByComponent(componentType);
+        ArrayList<Entity> result = new ArrayList<>();
+        for (String componentType : componentTypes) {
+            result.addAll(Arrays.asList(EntityManager.getInstance().getEntitiesByComponent(componentType)));
+        }
+        return result.toArray(new Entity[0]);
     }
 
 }

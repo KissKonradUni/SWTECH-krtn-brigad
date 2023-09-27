@@ -3,6 +3,7 @@ package hu.krtn.brigad.engine.ecs.component;
 import com.google.gson.Gson;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.Entity;
+import hu.krtn.brigad.engine.window.Logger;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -17,10 +18,24 @@ public class TransformComponent extends Component {
     private Vector3f rotation;
     private Vector3f scale;
 
-    public TransformComponent(Vector3f position, Vector3f rotation, Vector3f scale) {
+    public TransformComponent(Vector3f position, Vector3f rotation, Vector3f scale, Entity parent) {
         this.position = position;
         this.rotation = rotation;
         this.scale    = scale;
+
+        if (parent != null) {
+            TransformComponent parentTransform = (TransformComponent) parent.getComponent(TransformComponent.class);
+            if (parentTransform == null) {
+                Logger.error("The parent entity does not have a TransformComponent!");
+                this.parent = null;
+            } else {
+                this.parent = parentTransform;
+            }
+        }
+    }
+
+    public TransformComponent(Vector3f position, Vector3f rotation, Vector3f scale) {
+        this(position, rotation, scale, null);
     }
 
     /**
@@ -89,6 +104,10 @@ public class TransformComponent extends Component {
 
     public Vector3f getScale() {
         return scale;
+    }
+
+    public Vector3f getWorldPosition() {
+        return getModelMatrix().transformPosition(new Vector3f());
     }
 
     public void setPosition(Vector3f position) {

@@ -7,7 +7,7 @@ Beadandó munka a Szoftvertechnológia nevű tárgyhoz
   - Bodnár Gergely
   - Kola Sándor
   - Kiss Konrád Soma
-  - \<*reserved*\>
+  - Béres Kristóf
 
 
 - 🌐 <b>Nyelv: </b>

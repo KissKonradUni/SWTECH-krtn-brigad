@@ -7,7 +7,7 @@ in vec3 fragViewPos;
 
 out vec4 color;
 
-vec3 objectColor = vec3(0.0f, 0.8f, 0.3f);
+vec3 objectColor = vec3(0.5f, 0.5f, 0.5f);
 float specularStrength = 0.5f;
 float ambientStrength = 0.1f;
 float shininess = 64.0f;

@@ -112,7 +112,7 @@ public class EntityManager {
      * @param componentType The component type of the entities to be returned.
      * @return The entities with the given component type.
      */
-    public Entity[] queryEntitiesByComponent(String componentType) {
+    public Entity[] getEntitiesByComponent(String componentType) {
         return entitiesByComponent.get(componentType).toArray(new Entity[0]);
     }
 

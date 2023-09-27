@@ -22,7 +22,7 @@ public class TestLogic extends Logic {
     @Override
     protected void render(Entity[] queryTargets, float deltaTime) {
         TransformComponent component = (TransformComponent) queryTargets[0].getComponent(TransformComponent.class);
-        component.setRotation(component.getRotation().add(0.0f, 10.0f * deltaTime, 0.0f));
+        component.setRotation(component.getRotation().add(0.0f, 30.0f * deltaTime, 0.0f));
         component.setPosition(new Vector3f(0.0f, (float) Math.sin(time), -5.0f));
         time += deltaTime;
     }

@@ -1,9 +1,12 @@
 package hu.krtn.brigad.engine.rendering;
 
+import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.component.CameraComponent;
+import hu.krtn.brigad.engine.ecs.component.LightComponent;
 import hu.krtn.brigad.engine.window.Logger;
 import org.joml.Matrix4f;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
@@ -20,6 +23,14 @@ public class Shader {
      * It is used to prevent unnecessary shader switches.
      */
     private static int activeShader = -1;
+
+    private ArrayList<LightComponent> lightsCache = new ArrayList<>();
+
+    public void setLights(ArrayList<Entity> lightsCache) {
+        this.lightsCache.addAll(lightsCache.stream().map(
+            entity -> (LightComponent) entity.getComponent(LightComponent.class)
+        ).toList());
+    }
 
     /**
      * The ShaderTypes enum is used to specify the type of the shader.
@@ -97,9 +108,11 @@ public class Shader {
 
     /**
      * Binds the shader.
+     *
      * @param modelMatrixSupplier A supplier that returns the model matrix of the entity.
+     * @param material
      */
-    public void bind(Supplier<Matrix4f> modelMatrixSupplier) {
+    public void bind(Supplier<Matrix4f> modelMatrixSupplier, Material material) {
         if (activeShader != handle) {
             glUseProgram(handle);
             activeShader = handle;
@@ -110,6 +123,24 @@ public class Shader {
         if (camera != null) {
             glUniformMatrix4fv(getUniformLocation("proj"), false, camera.getProjectionMatrix().get(new float[16]));
             glUniformMatrix4fv(getUniformLocation("view"), false, camera.getViewMatrix().get(new float[16]));
+
+            int viewPosLoc = getUniformLocation("viewPos");
+            if (viewPosLoc != -1)
+                glUniform3f(viewPosLoc, camera.getTransform().getPosition().x, camera.getTransform().getPosition().y, camera.getTransform().getPosition().z);
+        }
+
+        glUniform3f(getUniformLocation("PBRData.albedo"),    material.getBaseColor().x, material.getBaseColor().y, material.getBaseColor().z);
+        glUniform1f(getUniformLocation("PBRData.metallic"),  material.getMetallic());
+        glUniform1f(getUniformLocation("PBRData.roughness"), material.getRoughness());
+
+        int lightCount = lightsCache.size();
+        glUniform1i(getUniformLocation("lightCount"), lightCount);
+
+        for (int i = 0; i < lightCount; i++) {
+            LightComponent light = lightsCache.get(i);
+            glUniform3f(getUniformLocation("lights[" + i + "].position"), light.getPosition().x, light.getPosition().y, light.getPosition().z);
+            glUniform3f(getUniformLocation("lights[" + i + "].color"),    light.getColor().x, light.getColor().y, light.getColor().z);
+            glUniform1f(getUniformLocation("lights[" + i + "].intensity"), light.getIntensity());
         }
     }
 
@@ -132,7 +163,7 @@ public class Shader {
      * @param name The name of the uniform.
      * @return The location of the uniform.
      */
-    public int getUniformLocation(String name) {
+    private int getUniformLocation(String name) {
         if (uniforms.containsKey(name)) {
             return uniforms.get(name);
         }

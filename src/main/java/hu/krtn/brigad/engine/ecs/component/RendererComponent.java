@@ -4,9 +4,12 @@ import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.logic.LogicManager;
+import hu.krtn.brigad.engine.rendering.Material;
 import hu.krtn.brigad.engine.rendering.Mesh;
 import hu.krtn.brigad.engine.rendering.Shader;
 import hu.krtn.brigad.engine.rendering.RendererLogic;
+
+import java.util.ArrayList;
 
 /**
  * The renderer component is used to render meshes.
@@ -16,16 +19,20 @@ public class RendererComponent extends Component {
 
     //TODO: Implement file system capabilities
     private final Mesh mesh;
+    private final Material material;
     private final Shader shader;
+
+    private TransformComponent transformComponent;
 
     /**
      * The constructor of the renderer component.
      * @param mesh The mesh to be rendered.
      * @param shader The shader to be used to render the mesh.
      */
-    public RendererComponent(Mesh mesh, Shader shader) {
+    public RendererComponent(Mesh mesh, Material material, Shader shader) {
         super();
         this.mesh = mesh;
+        this.material = material;
         this.shader = shader;
 
         if (!LogicManager.getInstance().isLogicPresent(RendererLogic.class))
@@ -40,6 +47,11 @@ public class RendererComponent extends Component {
     @Override
     public void deserialize(String data) {
 
+    }
+
+    public void bind() {
+        mesh.bind();
+        shader.bind(transformComponent::getModelMatrix, material);
     }
 
     public Mesh getMesh() {
@@ -69,9 +81,17 @@ public class RendererComponent extends Component {
      */
     @Override
     public void fulfillDependencies(Entity entity) throws ComponentDependencyException {
-        TransformComponent tc = (TransformComponent) entity.getComponent(TransformComponent.class);
-        if (tc == null) {
+        transformComponent = (TransformComponent) entity.getComponent(TransformComponent.class);
+        if (transformComponent == null) {
             throw new ComponentDependencyException(TransformComponent.class);
         }
+    }
+
+    /**
+     * Sets the lights for the shader.
+     * @param lightsCache The lights to be set.
+     */
+    public void setLights(ArrayList<Entity> lightsCache) {
+        shader.setLights(lightsCache);
     }
 }

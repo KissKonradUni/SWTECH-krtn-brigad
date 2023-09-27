@@ -116,4 +116,8 @@ public class CameraComponent extends Component {
             throw new ComponentDependencyException(TransformComponent.class);
         }
     }
+
+    public TransformComponent getTransform() {
+        return transformComponent;
+    }
 }
