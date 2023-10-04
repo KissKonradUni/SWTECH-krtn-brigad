@@ -8,6 +8,7 @@ import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static org.lwjgl.opengl.GL32.*;
@@ -24,12 +25,21 @@ public class Shader {
      */
     private static int activeShader = -1;
 
-    private ArrayList<LightComponent> lightsCache = new ArrayList<>();
+    private List<Entity> lightsCache = new ArrayList<>();
+    private List<LightComponent> compCache = new ArrayList<>();
 
-    public void setLights(ArrayList<Entity> lightsCache) {
-        this.lightsCache.addAll(lightsCache.stream().map(
-            entity -> (LightComponent) entity.getComponent(LightComponent.class)
-        ).toList());
+    public void setLights(List<Entity> lightsCache) {
+        if (this.lightsCache.equals(lightsCache)) return;
+
+        this.lightsCache = lightsCache;
+
+        compCache.clear();
+        for (Entity entity : lightsCache) {
+            LightComponent light = (LightComponent) entity.getComponent(LightComponent.class);
+            if (light == null) continue;
+
+            compCache.add(light);
+        }
     }
 
     /**
@@ -137,7 +147,7 @@ public class Shader {
         glUniform1i(getUniformLocation("lightCount"), lightCount);
 
         for (int i = 0; i < lightCount; i++) {
-            LightComponent light = lightsCache.get(i);
+            LightComponent light = compCache.get(i);
             glUniform3f(getUniformLocation("lights[" + i + "].position"), light.getPosition().x, light.getPosition().y, light.getPosition().z);
             glUniform3f(getUniformLocation("lights[" + i + "].color"),    light.getColor().x, light.getColor().y, light.getColor().z);
             glUniform1f(getUniformLocation("lights[" + i + "].intensity"), light.getIntensity());

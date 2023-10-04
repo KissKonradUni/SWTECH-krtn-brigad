@@ -113,7 +113,11 @@ public class EntityManager {
      * @return The entities with the given component type.
      */
     public Entity[] getEntitiesByComponent(String componentType) {
-        return entitiesByComponent.get(componentType).toArray(new Entity[0]);
+        ArrayList<Entity> list = entitiesByComponent.get(componentType);
+        if (list == null) {
+            return null;
+        } else
+            return list.toArray(new Entity[0]);
     }
 
     public boolean isDirty() {

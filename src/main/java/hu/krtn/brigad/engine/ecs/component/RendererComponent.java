@@ -10,6 +10,7 @@ import hu.krtn.brigad.engine.rendering.Shader;
 import hu.krtn.brigad.engine.rendering.RendererLogic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The renderer component is used to render meshes.
@@ -91,7 +92,7 @@ public class RendererComponent extends Component {
      * Sets the lights for the shader.
      * @param lightsCache The lights to be set.
      */
-    public void setLights(ArrayList<Entity> lightsCache) {
+    public void setLights(List<Entity> lightsCache) {
         shader.setLights(lightsCache);
     }
 }
