@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="homework.css" />
+		<title>KRTN Brigád H2</title>
+	</head>
+	<body>
+        <div class="flex-row">
+            <button class="back" onclick="window.location.href='index.html'">
+                &#9664;
+            </button>
+            <h1>H2</h1>
+        </div>
+		<h1>Vízió Dokumentum - Entity-Component Game Engine</h1>
+		<h2>1. Bevezetés</h2>
+		<p>
+			Ez a dokumentum a Java nyelven írt, Entity-Component rendszer alapú játékmotor létrehozásának céljait és
+			koncepcióját mutatja be.
+		</p>
+		<h2>2. Az alkalmazás helye</h2>
+		<h3>2.1 Üzleti lehetőségek</h3>
+		<p>
+			A projekt célja új lehetőségek kibontakoztatása a játékfejlesztés területén, különös tekintettel az alacsony
+			szintű befolyással a játék rajzolásán és felépítésén.
+		</p>
+		<h3>2.2 A probléma megfogalmazása</h3>
+		<p>
+			A játékfejlesztés során gyakran szükség van egy robosztus felépítésre és optimalizált adatkezelésre. Az
+			elkészítendő játékmotor célja ezen problémák megoldása.
+		</p>
+		<p>Az érintett célközönség magába foglalja:</p>
+		<ul>
+			<li>Cégek</li>
+			<li>Egyéni fejlesztők</li>
+			<li>Hobby fejlesztők</li>
+		</ul>
+		<p>
+			A játékmotor elkészítése csökkentheti a fejlesztők számára a játékfejlesztéshez szükséges időt és költségeket.
+		</p>
+		<p>
+			A sikeres megoldás esetében a kész motor monetizálható, így a kész kiadott játékok után bevételhez juthat a
+			fejlesztő.
+		</p>
+		<h3>2.3 Az elkészült termék helye</h3>
+		<ul>
+			<li>
+				A játékmotor az ezzel foglalkozó cégek és fejlesztők számára lesz elérhető, akik a játékfejlesztés során
+				használhatják.
+			</li>
+			<li>Kategória szerinti elhelyezkedés: Játékfejlesztés</li>
+			<li>
+				Az alapvető haszna az alapvető rendszerek kiépítésével történő idő csökkentés, és a játékfejlesztésre fordított
+				költségek csökkentése.
+			</li>
+			<li>
+				Ehhez hasonló már létrejött projektek:
+				<ul>
+					<li>Unity</li>
+					<li>Unreal Engine</li>
+					<li>Godot</li>
+					<li>...sok más</li>
+				</ul>
+			</li>
+			<li>
+				A különbség a már létező megoldásokhoz képest, hogy ez a motor Java nyelven íródott (bár ezen a téren sem az
+				első), illetve hogy az Entity-Component rendszeren kívül egy Query-Logic rendszert is tartalmaz, amely a
+				komponensek közötti kapcsolatokat kezeli.
+			</li>
+		</ul>
+		<h2>3. Érintettek és felhasználók</h2>
+		<h3>3.1. Az érintettek összefoglalása</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Elnevezés</th>
+					<th>Leírás</th>
+					<th>Szerep</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Rendszertervezők</td>
+					<td>A rendszer tervezésében résztvevő személyek</td>
+					<td>Felgyorsítja a fejlesztési folyamatot számukra</td>
+				</tr>
+				<tr>
+					<td>Fejlesztők</td>
+					<td>A játékmotor fejlesztésében résztvevő személyek</td>
+					<td>
+						A játékmotor fejlesztése egy már létező rendszerre épül, így a fejlesztési folyamat gyorsabbá válik számukra
+					</td>
+				</tr>
+				<tr>
+					<td>Projektmenedzserek</td>
+					<td>A projektet menedzselő személyek</td>
+					<td>A projektet menedzselik, a fejlesztőkkel tartják a kapcsolatot</td>
+				</tr>
+				<tr>
+					<td>Megrendelők</td>
+					<td>A projekt megrendelői</td>
+					<td>A projekt megrendelői, a projektet finanszírozzák</td>
+				</tr>
+			</tbody>
+		</table>
+		<h3>3.2. A felhasználók összefoglalása</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>Elnevezés</th>
+					<th>Leírás</th>
+					<th>Illetékes</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Játékosok</td>
+					<td>A játékmotor által támogatott játékok játékosai</td>
+					<td>A játékmotor fejlesztői</td>
+				</tr>
+				<tr>
+					<td>Tesztelők</td>
+					<td>A játékmotor által támogatott játékok tesztelői</td>
+					<td>A játékmotor fejlesztői</td>
+				</tr>
+			</tbody>
+		</table>
+		<h3>3.3 Felhasználói környezet</h3>
+		<p>
+			A felhasználók a játékmotort játékfejlesztés során használják, különböző operációs rendszereken és fejlesztői
+			környezetekben.
+		</p>
+		<ul>
+			<li>
+				Operációs rendszerek:
+				<ul>
+					<li>Windows</li>
+					<li>Linux</li>
+					<li>MacOS</li>
+				</ul>
+			</li>
+			<li>
+				Platformok:
+				<ul>
+					<li>PC</li>
+					<li>Android (?)</li>
+					<li>iOS (?)</li>
+				</ul>
+			</li>
+			<li>
+				Várható felhasználó szám:
+				<ul>
+					<li>Kis csoportok (1-20 fő)</li>
+					<li>Egyéni fejlesztők (1 fő)</li>
+					<li>Hobby fejlesztők (1 fő)</li>
+				</ul>
+			</li>
+			<li>
+				Mennyi ideig használják:
+				<ul>
+					<li>
+						A játékmotor használata a játékfejlesztés során történik, így a játékmotor használata a játék fejlesztésének
+						idejével arányos.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Különleges körülmények:
+				<ul>
+					<li>Csak olyan rendszereken használható, amelyek támogatják a Java nyelvet.</li>
+				</ul>
+			</li>
+			<li>
+				Várható integrációk:
+				<ul>
+					<li>Reklámközvetítő rendszerek</li>
+					<li>Felhőalapú szolgáltatások</li>
+					<li>Egyéb játékfejlesztői eszközök</li>
+					<li>IDE integrációk</li>
+				</ul>
+			</li>
+		</ul>
+		<h2>4. A végtermék áttekintése</h2>
+		<h3>4.1 A termék kapcsolatai</h3>
+		<p>A játékmotor együttműködik különböző játékfejlesztői eszközökkel és platformokkal.</p>
+		<h3>4.2. A termék használatának előnyei</h3>
+		<ul>
+			<li>Gyors és hatékony számítások</li>
+			<li>Rugalmas Entity-Component rendszer</li>
+			<li>Egyszerű integráció más már létező fájlformátumokkal (.gltf, .obj, .fbx, stb.)</li>
+		</ul>
+		<h3>4.3. Feltételezések és függőségek</h3>
+		<ul>
+			<li>
+				<p>Hardver- és szoftverkövetelmények</p>
+				<ul>
+					<li>Java</li>
+					<li>OpenGL</li>
+				</ul>
+			</li>
+			<li>
+				<p>Külső könyvtárak és API-k</p>
+				<ul>
+					<li>LWJGL</li>
+				</ul>
+			</li>
+		</ul>
+		<h3>4.4 Költségbecslés</h3>
+		<p>Várható költségek:</p>
+		<ul>
+			<li>Fejlesztői munkaerő költsége</li>
+			<li>Hardver költségek</li>
+			<li>Szoftver költségek</li>
+			<li>Egyéb költségek</li>
+		</ul>
+		<p>Körülbelül: 1.000.000 Ft</p>
+		<h3>4.5. Installáció</h3>
+		<p>A játékmotor használatához szükséges a Java és az OpenGL támogatása. Installáció:</p>
+		<ul>
+			<li>Java projekt létrehozása</li>
+			<li>Maven függőségek hozzáadása</li>
+			<li>Példa kódok használata</li>
+		</ul>
+		<h2>5. A végtermék jellemzői, biztosított szolgáltatások</h2>
+		<ul>
+			<li>Entity-Component rendszer</li>
+			<li>Hardverközeli optimalizációk</li>
+			<li>Grafikai és hangkezelési funkciók</li>
+		</ul>
+		<h2>6. Korlátozások</h2>
+		<ul>
+			<li>Kompatibilitási korlátozások</li>
+			<li>Teljesítménykorlátozások</li>
+		</ul>
+		<h2>7. Minőségi elvárások</h2>
+		<ul>
+			<li>Real-time játékmenet</li>
+			<li>Gyors és memória hatékony számítások</li>
+			<li>VRAM kezelés</li>
+			<li>Egyszerű integráció</li>
+		</ul>
+		<h2>8. Dokumentációkkal kapcsolatos követelmények</h2>
+		<ul>
+			<li>Felhasználói kézikönyv</li>
+			<li>Fejlesztői dokumentáció</li>
+		</ul>
+		<h2>9. Kockázat lista</h2>
+		<ul>
+			<li>A játékmotor nem lesz elég gyors</li>
+			<li>A nyelv nem lesz elég könnyen disztribuálható más platformokra</li>
+			<li>Kevés lesz a funkció a versenytársakkal szemben</li>
+		</ul>
+		<h2>10. Szótár</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Szó</th>
+					<th>Magyarázat</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Entity</td>
+					<td>Az Entity-Component rendszerben az Entity egy olyan objektum, amelyhez komponensek tartoznak.</td>
+				</tr>
+				<tr>
+					<td>Component</td>
+					<td>
+						Az Entity-Component rendszerben a Component egy olyan objektum, amely az Entity-hez tartozik. Az
+						adattárolásért felelős.
+					</td>
+				</tr>
+				<tr>
+					<td>Logic</td>
+					<td>
+						Az Entity-Component rendszerben a System egy olyan objektum, amely a komponensekkel való műveletekért
+						felelős.
+					</td>
+				</tr>
+				<tr>
+					<td>Query</td>
+					<td>
+						Az Entity-Component rendszerben a Query egy olyan objektum, amely a komponensekre történő szűrést végzi.
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

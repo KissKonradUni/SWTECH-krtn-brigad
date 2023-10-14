@@ -37,3 +37,13 @@ build/
 ### Mac OS ###
 .DS_Store
 save.json
+
+### Markdown ###
+/markdown/*
+
+### Out ###
+/out/*
+
+### Other ###
+hu.dic
+MANIFEST.MF
