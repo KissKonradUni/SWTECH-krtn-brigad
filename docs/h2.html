@@ -8,12 +8,10 @@
 		<title>KRTN Brigád H2</title>
 	</head>
 	<body>
-        <div class="flex-row">
-            <button class="back" onclick="window.location.href='index.html'">
-                &#9664;
-            </button>
-            <h1>H2</h1>
-        </div>
+		<div class="flex-row">
+			<button class="back" onclick="window.location.href='index.html'">&#9664;</button>
+			<h1>H2</h1>
+		</div>
 		<h1>Vízió Dokumentum - Entity-Component Game Engine</h1>
 		<h2>1. Bevezetés</h2>
 		<p>
@@ -223,35 +221,45 @@
 			<li>Maven függőségek hozzáadása</li>
 			<li>Példa kódok használata</li>
 		</ul>
-		<h2>5. A végtermék jellemzői, biztosított szolgáltatások</h2>
-		<ul>
-			<li>Entity-Component rendszer</li>
-			<li>Hardverközeli optimalizációk</li>
-			<li>Grafikai és hangkezelési funkciók</li>
-		</ul>
+		<h2>5. Végtermék jellemzői</h2>
+		<p>A motor project végterméke egy olyan játékmotor, mely lehetőséget ad nagy skálás videójátékok, főként 3D modelleket tartalmazó játékok készítésére. Ezeket a lehetőségeket egy fejlesztőkörnyezet létesítésével biztosítunk, mely moduláris, azaz más külső fejlesztőrendszereket is lehet csatolni a project készítésekor. A fejleszői környezet főként GUI alapú, hiszen a célunk nem csak a már iparban lévő, vagy tapasztalt fejlesztők befogása, hanem a tanítás is a cél.</p>
+		<p>Az Unreal Engine, Unity, és más fejlesztőmotorok mintájára lesz lehetőség megosztani tartalmakat egy online “marketplace” felületen, előre elkészített modelleket vagy skálázott világokat oszthatnak meg a fejlesztők egymás között.</p>
+		<p>Ez a “szociális háló” megoldási teret ad a tehetséges modellezőknek és fejlesztőknek, hogy megmutathassák tehetségüket, vagy csak szimplán egymás között megoszthassák tudásukat, hogy meddig ereszthetik a játékmotor határait ki, legyen ez az optimalizációban, vagy grafikai megoldásokban.</p>
 		<h2>6. Korlátozások</h2>
-		<ul>
-			<li>Kompatibilitási korlátozások</li>
-			<li>Teljesítménykorlátozások</li>
-		</ul>
-		<h2>7. Minőségi elvárások</h2>
-		<ul>
-			<li>Real-time játékmenet</li>
-			<li>Gyors és memória hatékony számítások</li>
-			<li>VRAM kezelés</li>
-			<li>Egyszerű integráció</li>
-		</ul>
+		<p>
+			A szoftver optimális működéséhez a minimális rendszerkövetelmények teljesülése szükséges, ilettve a tervezett programhoz szükseges tárhely biztosítása.Ha a fent említett körülmények nem telejsülnek, akkor nem biztosított a szoftver optimális futása illetve akár a teljes összeomlás is fennálhat.Természetesen a nagyobb teljesítménnyel rendelkező gépeken a futás jobban biztosított, illetve komplikáltabb rendszerek is megoldhatóvá válnak.
+			A minimum követelmények az alábbiak:
+			<ul>
+				<li>Windows 10 64-bit version 1909 revision .1350 vagy  2004 and 20H2 revision .789</li>
+				<li>Quad-core Intel vagy AMD, 2.5 GHz</li>
+				<li>8 GB RAM</li>
+				<li>OpenGL 3.4</li>
+			</ul>
+		</p>
+		<h2>7. Minősegi elvárások: </h2>
+		<p>Teljesítmény - A megfelelő futáshoz szükséges a fent említett rendszekövetelmények minimum teljesítése.</p>
+		<p>Válaszidő - A válszidőre nincs konkrét elvárás, függ a készítendő játék bonyolultságától illetve a felhasználó elvárásaitól és a szükséges gépigénytől.</p>
+		<p>Felhasználó barátság - A szoftverünket minél jobban átláthatóra és a tutorial elvégzése utan egy laikus számára is érthetőre tervezzük.</p>
 		<h2>8. Dokumentációkkal kapcsolatos követelmények</h2>
+		<p>A projekt tervezése, illetve fejlesztése közben elkészült, valamint a jövőben elkészülő dokumentumok listája:</p>
 		<ul>
-			<li>Felhasználói kézikönyv</li>
-			<li>Fejlesztői dokumentáció</li>
+			<li>Analízis modell</li>
+			<li>Fejlesztői csoport adatok</li>
+			<li>Felhasználói dokumentáció</li>
+			<li>Munkanapló</li>
+			<li>Projekt előkészítés</li>
+			<li>Projekt terv</li>
+			<li>Rendszertervezés</li>
+			<li>Software követelmény specifikáció (SRS)</li>
+			<li>Szótár</li>
+			<li>Telepítési és kezelési útmutató</li>
+			<li>Vízió dokumentum</li>
 		</ul>
-		<h2>9. Kockázat lista</h2>
-		<ul>
-			<li>A játékmotor nem lesz elég gyors</li>
-			<li>A nyelv nem lesz elég könnyen disztribuálható más platformokra</li>
-			<li>Kevés lesz a funkció a versenytársakkal szemben</li>
-		</ul>
+		<p>A dokumentációt minél részletesebbre és átláthatóbbra tervezzük, hogy a  teljesen laikus és programozáshoz nem értő, kezdő játéktervező emberek  is tudjanak legalább alap játékokat tervezni.</p>
+		<h2>9. Kockázat</h2>
+		<p>Kompatibilitás - Amennyiben a várt rendszekövetelmények nem teljesülnek,  nem biztosított a szoftver megfelelő futása. </p>
+		<p>Szakismeret - Alapszintű  programozási tudás szükséges a szoftver használatához, akár  előismeretekkel akár a szoftverünkbe épített tutorial videó  elsajátításával. </p>
+		<p>Render idő - Szintén, amennyiben a  rendszerkövetelmények nem teljesülnek, akkor a renderelési idő  túlságosan hosszú lehet, ami kellemetlen lehet a felhasználó számára.</p>
 		<h2>10. Szótár</h2>
 		<table>
 			<thead>
@@ -283,6 +291,39 @@
 					<td>Query</td>
 					<td>
 						Az Entity-Component rendszerben a Query egy olyan objektum, amely a komponensekre történő szűrést végzi.
+					</td>
+				</tr>
+				<tr>
+					<td>Dokumentáció</td>
+					<td>Általában tartalmazza mindazokat az adatokat, amelyek egy kész gyártmányt egyértelműen meghatároznak.</td>
+				</tr>
+				<tr>
+					<td>Felhasználó/User</td>
+					<td>A felhasználó az a személy, aki egy számítógépes szolgáltatás használója.</td>
+				</tr>
+				<tr>
+					<td>Futási idő</td>
+					<td>A futási idő egy program végrehajtásához szükséges idő.</td>
+				</tr>
+				<tr>
+					<td>Rendszerkövetelmény</td>
+					<td>
+						A rendelkezésre álló PC legalább mely hardverelemeket tartalmazza (minimum konfiguráció ami szükséges a
+						szoftver gördülékeny futtatásához).
+					</td>
+				</tr>
+				<tr>
+					<td>Grafikus felhasználói felület/Graphical User Interface (GUI)</td>
+					<td>
+						A számítástechnikában egy olyan, a számítógép és ember közti kapcsolatot megvalósító elemek összessége,
+						melyek a monitor képernyőjén szöveges és rajzos elemek együtteseként jelennek meg.
+					</td>
+				</tr>
+				<tr>
+					<td>Szoftverfejlesztő/software developer</td>
+					<td>
+						A szoftverfejlesztő egy foglalkozás. A szoftverfejlesztő feladata számítógépes szoftverek (programok)
+						megtervezése és kivitelezése.
 					</td>
 				</tr>
 			</tbody>
