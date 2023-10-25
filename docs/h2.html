@@ -195,11 +195,11 @@
 		<p>Felhasználó barátság - A szoftverünket minél jobban átláthatóra és a tutorial elvégzése utan egy laikus számára is érthetőre tervezzük.</p>
 		<h3>Előleges optimalizációk</h3>
 		<ul>
-			<p>Modellek optimalizálása</p>
+			<h3>Modellek optimalizálása</h3>
 			<li>A játékmotor a modelleket szigorúan GLTF formátumban kezeli. Ez a formátum egy remekül optimalizált formátum, amely a modellek méretét jelentősen csökkenti. A modellek méretének csökkentése mellett a GLTF formátum lehetővé teszi a modellek animálását is. Viszont ez a formátum nem eléggé kompresszált ahhoz, hogy egy kész játékban mindent a felhasználókhoz így küldjünk ki, ezért a jövőben egy már előre optimalizált formátumot is támogatni fog a játékmotor, amely tömörítve lesz az XZ formátummal.</li>
-			<p>Textúrák optimalizálása</p>
+			<h3>Textúrák optimalizálása</h3>
 			<li>A játékmotor jelenleg bármilyen képformátumot támogat, de ezek mind előfeldolgozásra kerülnek, és a játékmotor által támogatott formátumokba kerülnek átalakításra. A jövőben a játékmotor támogatni fog egy előre optimalizált formátumot, amely tömörítve lesz XZ formátummal. Ennek ellenére a kész játék képes lesz továbbra is minden formátum betöltésére azzal az indokkal, hogy szeretnénk a játék bővíthetőségét (modolhatóságát) megőrizni.</li>
-			<p>Rajzolás optimalizálása</p>
+			<h3>Rajzolás optimalizálása</h3>
 			<li>A rajzolás során a motor több elég gyakran használt methódust alkalmaz:
 
 				A modellek egy stride-olt tömbben vannak tárolva, amelynek minden eleme egy vertex. A vertexeket a stride-olt tömbben a következő sorrendben tároljuk: pozíció, normál, textúra koordináta, stb. Ez a sorrend a legoptimálisabb a GPU számára, mivel a GPU-nak így nem kell a vertexeket átrendeznie. Gyakorlatilag a probléma a feldolgozatlan modellekkel az, hogy a VRAM-ban sok különböző helyen helyezkedik el a vertexek adata, így a GPU-nak sok különböző helyről kell az adatokat összegyűjtenie, ami lassítja a feldolgozást. Amikor erre a formátumra optimalizálunk, akkor a vertexek adatai egy helyen helyezkednek el a VRAM-ban, így a GPU-nak nem kell az adatokat összegyűjtenie, így a feldolgozás gyorsabb lesz.
@@ -209,7 +209,7 @@
 				A modellek nem kamera felé néző oldalait kihagyjuk a rajzolás során, így a GPU-nak kevesebb dolga lesz, így a rajzolás gyorsabb lesz. Ez alól egyetlen kivétel van, ami pedig az átlátszó modellek, amelyeknél a kihagyás nem lehetséges.
 				
 				Alkalmazni fogunk egy Level of Detail (LOD) algoritmust, amely a távolabbi modelleket alacsonyabb felbontású modellekre cseréli, így a GPU-nak kevesebb dolga lesz, így a rajzolás gyorsabb lesz.</li>
-				<p>Fizika optimalizálása</p>
+				<h3>Fizika optimalizálása</h3>
 				<li>A motor egy olyan fizikai motorral fog rendelkezni, amely számára megszabható lesz hogy 2, vagy 3 dimenziós fizikát szeretnénk használni. A 2 dimenziós fizika használata esetén a motor nem fogja számolni a modellek harmadik dimenziós pozícióját, így a számítások gyorsabbak lesznek.
 
 					A motor egy Verlet-integrációs algoritmust fog használni, amely a pontosságot feláldozza a gyorsaságért. Ennek ellenére a Verlet-integráció helyes implementálása determináns eredményt okoz, azaz ugyanarra a bemenetre ugyanazt az eredményt kapjuk, így a játékmenet nem fog megváltozni.
