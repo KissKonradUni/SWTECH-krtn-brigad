@@ -128,82 +128,41 @@
 		<h3>3.3 Felhasználói környezet</h3>
 		<p>
 			A felhasználók a játékmotort játékfejlesztés során használják, különböző operációs rendszereken és fejlesztői
-			környezetekben.
+			környezetekben. Ezek az operációs rendszerek magukba foglalják a két legfőbb OS-t, a Windowsot és a Linuxot, de sajnos az iOS-t nem támogatja az LWJGL haszálata miatt. Ebből adódóan főleg PC platformon lesz elérhető, de a mobilos fejlesztés is megoldható.
+			A motor akár egyéni fejlesztők, legyen ez hobby vagy independens fejlesztő, és kisebb nagyobb csoportok (akár 20 fő) által használható, a Git-hez hasonló Push - Pull rendszer itt is alkalmazható. Evidens, hogy csak Java-t támogató rendszerek engedélyezik a használatot.
+			A használati idő arányos a projekt skálájával, így konkrét "élettartama" nincs a játékmotornak.
+			Várható integrációk közé tartozik a Reklámközvetítő rendszer, ami a monetizációt segíti, az előbb említett push - pull rendszer miatt a Felhőalapú szolgáltatások is előnyt élveznek, valamint az IDE-k integrálása is tervben van.
+			A felhasználói környezet maga, egy modern, letisztult, moduláris GUI, amit az addonok és egyéb integrációkkal testreszabhatunk.
 		</p>
-		<ul>
-			<li>
-				Operációs rendszerek:
-				<ul>
-					<li>Windows</li>
-					<li>Linux</li>
-					<li>MacOS</li>
-				</ul>
-			</li>
-			<li>
-				Platformok:
-				<ul>
-					<li>PC</li>
-					<li>Android (?)</li>
-					<li>iOS (?)</li>
-				</ul>
-			</li>
-			<li>
-				Várható felhasználó szám:
-				<ul>
-					<li>Kis csoportok (1-20 fő)</li>
-					<li>Egyéni fejlesztők (1 fő)</li>
-					<li>Hobby fejlesztők (1 fő)</li>
-				</ul>
-			</li>
-			<li>
-				Mennyi ideig használják:
-				<ul>
-					<li>
-						A játékmotor használata a játékfejlesztés során történik, így a játékmotor használata a játék fejlesztésének
-						idejével arányos.
-					</li>
-				</ul>
-			</li>
-			<li>
-				Különleges körülmények:
-				<ul>
-					<li>Csak olyan rendszereken használható, amelyek támogatják a Java nyelvet.</li>
-				</ul>
-			</li>
-			<li>
-				Várható integrációk:
-				<ul>
-					<li>Reklámközvetítő rendszerek</li>
-					<li>Felhőalapú szolgáltatások</li>
-					<li>Egyéb játékfejlesztői eszközök</li>
-					<li>IDE integrációk</li>
-				</ul>
-			</li>
-		</ul>
 		<h2>4. A végtermék áttekintése</h2>
 		<h3>4.1 A termék kapcsolatai</h3>
 		<p>A játékmotor együttműködik különböző játékfejlesztői eszközökkel és platformokkal.</p>
 		<h3>4.2. A termék használatának előnyei</h3>
 		<ul>
-			<li>Gyors és hatékony számítások</li>
-			<li>Rugalmas Entity-Component rendszer</li>
-			<li>Egyszerű integráció más már létező fájlformátumokkal (.gltf, .obj, .fbx, stb.)</li>
+			<p>Az Entity-Component-System (ECS) architektúra
+
+				Az ECS architektúra egy olyan programozási modell, amelyet a játékmotorok fejlesztésére használnak. Az ECS architektúra három fő komponensből áll: az entitásokból, a komponensekből és a rendszerekből (itt logikák). Az entitások a játékban lévő objektumokat reprezentálják, a komponensek az entitások tulajdonságait, míg a rendszerek az entitásokon végrehajtandó műveleteket írják le. Ez a fajta ECS architektúra előnye, hogy a komponensek és a rendszerek függetlenek egymástól, így könnyen új komponenseket és rendszereket lehet hozzáadni a játékhoz.
+				A játékmotoron belül az entitások szűrésére több lehetőség is van, mint példuál adott komponens(ek), vagy név szerint.
+				
+				Ezentúl a játékmotor képes lesz úgynevezett kollekciók használatára. Ezek gyakorlatilag külön JSON fájlban, már előre összecsoportosított entitások, amelyek kész szerepet töltenek be. Ilyenek lehetnek később például: játékos, ellenfél, fegyver, pálya, stb. Ezeket a kollekciókat a játékmotor a játék futása során is képes lesz betölteni, így a játékmenet folyamatosan bővíthető (modolható) lesz. Egyszerű integrációt is támogat más már létező fájlformátumokkal (.gltf, .obj, .fbx, stb.)</p>
+			<p>Post-Processing effektek: A játékmotor támogatni fogja a post-processing effekteket, azaz olyan effekteket, amelyek az egész már kirajzolt játékra kerülnek alkalmazásra utólag egy framebuffer segítségével. Ilyen effektek például a bloom, a motion blur, a depth of field, a vignette, a chromatic aberration, a film grain, a lens flare, a color grading és még sok más.
+			</p>
+			<p>Editor quick-switch: A játékmotor támogatni fog egy olyan funkciót, amely lehetővé teszi a játékmenet gyors újraindítását, így a fejlesztőknek nem kell a játékot újra elindítaniuk, ha valamit szeretnének tesztelni. Ez valószínűleg a DearIMGUI immidiate graphical user interface segítségével fog megvalósulni. Ennek ellenére a játékban lesz a UI létrehozására egy külön RMGUI, azaz retained graphical user interface, amely a játékmenet során is használható lesz.</p>
+			<p>A játékmotor támogatni fog egy olyan funkciót, amely lehetővé teszi a játékmenet során a játék állapotának mentését már a fejlesztés során bármi féle extra implementáció nékül, így a játékmenet folytatása a mentési ponttól lehetséges lesz.</p>
 		</ul>
 		<h3>4.3. Feltételezések és függőségek</h3>
 		<ul>
 			<li>
 				<p>Hardver- és szoftverkövetelmények</p>
 				<ul>
-					<li>Java</li>
-					<li>OpenGL</li>
+					<li>A minimum követelmény, ahogy említett volt a Java és az OpenGL támogatása, valamint a minimum követelmények a következőek: </li>
+				<li>Windows 10 64-bit version 1909 revision .1350 vagy  2004 and 20H2 revision .789</li>
+				<li>Quad-core Intel vagy AMD, 2.5 GHz</li>
+				<li>8 GB RAM</li>
+				<li>OpenGL 3.4</li>
 				</ul>
 			</li>
-			<li>
-				<p>Külső könyvtárak és API-k</p>
-				<ul>
-					<li>LWJGL</li>
-				</ul>
-			</li>
+			<p>Külső könyvtár/API jelenleg még csak az LWJGL.</p>
 		</ul>
 		<h3>4.4 Költségbecslés</h3>
 		<p>Várható költségek:</p>
@@ -225,21 +184,38 @@
 		<p>A motor project végterméke egy olyan játékmotor, mely lehetőséget ad nagy skálás videójátékok, főként 3D modelleket tartalmazó játékok készítésére. Ezeket a lehetőségeket egy fejlesztőkörnyezet létesítésével biztosítunk, mely moduláris, azaz más külső fejlesztőrendszereket is lehet csatolni a project készítésekor. A fejleszői környezet főként GUI alapú, hiszen a célunk nem csak a már iparban lévő, vagy tapasztalt fejlesztők befogása, hanem a tanítás is a cél.</p>
 		<p>Az Unreal Engine, Unity, és más fejlesztőmotorok mintájára lesz lehetőség megosztani tartalmakat egy online “marketplace” felületen, előre elkészített modelleket vagy skálázott világokat oszthatnak meg a fejlesztők egymás között.</p>
 		<p>Ez a “szociális háló” megoldási teret ad a tehetséges modellezőknek és fejlesztőknek, hogy megmutathassák tehetségüket, vagy csak szimplán egymás között megoszthassák tudásukat, hogy meddig ereszthetik a játékmotor határait ki, legyen ez az optimalizációban, vagy grafikai megoldásokban.</p>
+
 		<h2>6. Korlátozások</h2>
 		<p>
 			A szoftver optimális működéséhez a minimális rendszerkövetelmények teljesülése szükséges, ilettve a tervezett programhoz szükseges tárhely biztosítása.Ha a fent említett körülmények nem telejsülnek, akkor nem biztosított a szoftver optimális futása illetve akár a teljes összeomlás is fennálhat.Természetesen a nagyobb teljesítménnyel rendelkező gépeken a futás jobban biztosított, illetve komplikáltabb rendszerek is megoldhatóvá válnak.
-			A minimum követelmények az alábbiak:
-			<ul>
-				<li>Windows 10 64-bit version 1909 revision .1350 vagy  2004 and 20H2 revision .789</li>
-				<li>Quad-core Intel vagy AMD, 2.5 GHz</li>
-				<li>8 GB RAM</li>
-				<li>OpenGL 3.4</li>
-			</ul>
 		</p>
 		<h2>7. Minősegi elvárások: </h2>
 		<p>Teljesítmény - A megfelelő futáshoz szükséges a fent említett rendszekövetelmények minimum teljesítése.</p>
 		<p>Válaszidő - A válszidőre nincs konkrét elvárás, függ a készítendő játék bonyolultságától illetve a felhasználó elvárásaitól és a szükséges gépigénytől.</p>
 		<p>Felhasználó barátság - A szoftverünket minél jobban átláthatóra és a tutorial elvégzése utan egy laikus számára is érthetőre tervezzük.</p>
+		<h3>Előleges optimalizációk</h3>
+		<ul>
+			<h3>Modellek optimalizálása</h3>
+			<li>A játékmotor a modelleket szigorúan GLTF formátumban kezeli. Ez a formátum egy remekül optimalizált formátum, amely a modellek méretét jelentősen csökkenti. A modellek méretének csökkentése mellett a GLTF formátum lehetővé teszi a modellek animálását is. Viszont ez a formátum nem eléggé kompresszált ahhoz, hogy egy kész játékban mindent a felhasználókhoz így küldjünk ki, ezért a jövőben egy már előre optimalizált formátumot is támogatni fog a játékmotor, amely tömörítve lesz az XZ formátummal.</li>
+			<h3>Textúrák optimalizálása</h3>
+			<li>A játékmotor jelenleg bármilyen képformátumot támogat, de ezek mind előfeldolgozásra kerülnek, és a játékmotor által támogatott formátumokba kerülnek átalakításra. A jövőben a játékmotor támogatni fog egy előre optimalizált formátumot, amely tömörítve lesz XZ formátummal. Ennek ellenére a kész játék képes lesz továbbra is minden formátum betöltésére azzal az indokkal, hogy szeretnénk a játék bővíthetőségét (modolhatóságát) megőrizni.</li>
+			<h3>Rajzolás optimalizálása</h3>
+			<li>A rajzolás során a motor több elég gyakran használt methódust alkalmaz:
+
+				A modellek egy stride-olt tömbben vannak tárolva, amelynek minden eleme egy vertex. A vertexeket a stride-olt tömbben a következő sorrendben tároljuk: pozíció, normál, textúra koordináta, stb. Ez a sorrend a legoptimálisabb a GPU számára, mivel a GPU-nak így nem kell a vertexeket átrendeznie. Gyakorlatilag a probléma a feldolgozatlan modellekkel az, hogy a VRAM-ban sok különböző helyen helyezkedik el a vertexek adata, így a GPU-nak sok különböző helyről kell az adatokat összegyűjtenie, ami lassítja a feldolgozást. Amikor erre a formátumra optimalizálunk, akkor a vertexek adatai egy helyen helyezkednek el a VRAM-ban, így a GPU-nak nem kell az adatokat összegyűjtenie, így a feldolgozás gyorsabb lesz.
+				
+				Amennyiben alacsony felbontású képekkel dolgozunk, akkor a játékmotor a képeket egyetlen textúrába tömöríti, amelyet textúra-atlasznak hívunk, így a GPU-nak egyszer kell csak ezeket feldolgoznia, így a rajzolás gyorsabb lesz.
+				
+				A modellek nem kamera felé néző oldalait kihagyjuk a rajzolás során, így a GPU-nak kevesebb dolga lesz, így a rajzolás gyorsabb lesz. Ez alól egyetlen kivétel van, ami pedig az átlátszó modellek, amelyeknél a kihagyás nem lehetséges.
+				
+				Alkalmazni fogunk egy Level of Detail (LOD) algoritmust, amely a távolabbi modelleket alacsonyabb felbontású modellekre cseréli, így a GPU-nak kevesebb dolga lesz, így a rajzolás gyorsabb lesz.</li>
+				<h3>Fizika optimalizálása</h3>
+				<li>A motor egy olyan fizikai motorral fog rendelkezni, amely számára megszabható lesz hogy 2, vagy 3 dimenziós fizikát szeretnénk használni. A 2 dimenziós fizika használata esetén a motor nem fogja számolni a modellek harmadik dimenziós pozícióját, így a számítások gyorsabbak lesznek.
+
+					A motor egy Verlet-integrációs algoritmust fog használni, amely a pontosságot feláldozza a gyorsaságért. Ennek ellenére a Verlet-integráció helyes implementálása determináns eredményt okoz, azaz ugyanarra a bemenetre ugyanazt az eredményt kapjuk, így a játékmenet nem fog megváltozni.
+					
+					A motor egy egyszerű sector-based optimalizációs algoritmust fog alkalmazni, azaz egy érintkezés ellenőrzése során csak az adott cella elemeit, illetve annak szomszédait fogja vizsgálni. Ez a módszer nem a legoptimálisabb, de a játékmenetet nem fogja befolyásolni, és a számítások gyorsabbak lesznek.</li>
+		</ul>
 		<h2>8. Dokumentációkkal kapcsolatos követelmények</h2>
 		<p>A projekt tervezése, illetve fejlesztése közben elkészült, valamint a jövőben elkészülő dokumentumok listája:</p>
 		<ul>
