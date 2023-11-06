@@ -9,6 +9,8 @@ struct vertex_data {
 };
 in vertex_data f_PBRInfo;
 
+in vec3 f_localPos;
+
 struct pbr_data {
     float metallic;
     float roughness;
@@ -25,6 +27,8 @@ struct light_data {
 };
 uniform light_data f_lights[8];
 uniform int f_numLights;
+
+uniform int f_layer;
 
 out vec4 color;
 
@@ -59,6 +63,7 @@ float GeometrySchlickGGX(float NdotV, float roughness)
 
     return num / denom;
 }
+
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0);
@@ -69,11 +74,31 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
     return ggx1 * ggx2;
 }
 
+const uint k = 1103515245U;
+
+// https://www.shadertoy.com/view/dtfGDl
+vec3 hash( uvec3 x )
+{
+    x *= k;
+    x = ((x>>2u)^(x.yzx>>1u)^x.zxy)*k;
+    return vec3(x)*(1.0/float(0xffffffffU));
+}
+
 void main() {
     vec3 N = normalize(f_PBRInfo.normal);                       // normal
     vec3 V = normalize(f_PBRInfo.viewPos - f_PBRInfo.position); // view direction
 
     vec4 f_albedo = texture(albedo, f_PBRInfo.texCoord); // albedo
+
+    int max_layer = 256;
+    float density = 200.0f;
+
+    // Shell texture smth
+    uvec3 base_pos = uvec3((f_PBRInfo.texCoord + vec2(density)) * density, 0.0f);
+    float circles = clamp(1.0f - length(fract(f_PBRInfo.texCoord * density) - vec2(0.5f)), 0.0f, 1.0f);
+    float val = clamp(hash(base_pos).r * circles + 0.1f, 0.0f, 1.0f);
+
+    f_albedo *= f_layer / (max_layer / 2.0f);
 
     vec3 Lo = vec3(0.0);
     for (int i = 0; i < f_numLights; i++) {
@@ -112,4 +137,7 @@ void main() {
     col += f_PBRData.emission;
 
     color = vec4(col, 1.0);
+
+    if (val < (1.0f / max_layer) * f_layer )
+        discard;
 }

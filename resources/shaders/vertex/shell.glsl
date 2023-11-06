@@ -13,6 +13,8 @@ struct vertex_data {
 };
 out vertex_data f_PBRInfo;
 
+out vec3 f_localPos;
+
 uniform mat4 model;
 uniform mat4 proj;
 uniform mat4 view;
@@ -26,4 +28,6 @@ void main() {
     f_PBRInfo.normal   = mat3(transpose(inverse(model))) * normal;
 
     f_PBRInfo.viewPos = viewPos;
+
+    f_localPos = position;
 }

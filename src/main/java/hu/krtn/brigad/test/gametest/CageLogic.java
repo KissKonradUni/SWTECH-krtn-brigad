@@ -1,4 +1,4 @@
-package hu.krtn.brigad.test;
+package hu.krtn.brigad.test.gametest;
 
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.component.TransformComponent;

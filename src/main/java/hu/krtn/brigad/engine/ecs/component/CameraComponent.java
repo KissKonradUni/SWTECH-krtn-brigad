@@ -1,5 +1,7 @@
 package hu.krtn.brigad.engine.ecs.component;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
@@ -15,7 +17,7 @@ public class CameraComponent extends Component {
     /**
      * The field of view of the camera in degrees.
      */
-    private float FOV = 70.0f;
+    private float fieldOfView = 70.0f;
     /**
      * The near plane of the camera.
      */
@@ -40,15 +42,35 @@ public class CameraComponent extends Component {
      */
     private static CameraComponent activeCamera = null;
 
-    public CameraComponent() {
+    public CameraComponent(float fieldOfView, float nearPlane, float farPlane, boolean active) {
         super();
         float aspectRatio = Window.getInstance().getAspectRatio();
 
-        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(FOV), aspectRatio, nearPlane, farPlane);
+        this.fieldOfView = fieldOfView;
+        this.nearPlane = nearPlane;
+        this.farPlane = farPlane;
 
-        if (activeCamera == null) {
+        recalculateProjectionMatrix(aspectRatio);
+
+        if (activeCamera == null || active) {
             activeCamera = this;
         }
+    }
+
+    public CameraComponent(float fieldOfView, float nearPlane, float farPlane) {
+        this(fieldOfView, nearPlane, farPlane, false);
+    }
+
+    public CameraComponent() {
+        this(70.0f, 0.1f, 1000.0f, false);
+    }
+
+    /**
+     * Recalculates the projection matrix of the camera.
+     * @param aspectRatio The aspect ratio of the window.
+     */
+    public void recalculateProjectionMatrix(float aspectRatio) {
+        projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(this.fieldOfView), aspectRatio, nearPlane, farPlane);
     }
 
     /**
@@ -68,12 +90,30 @@ public class CameraComponent extends Component {
 
     @Override
     public String serialize() {
-        return "{}";
+        JsonObject object = new JsonObject();
+
+        object.addProperty("fieldOfView", fieldOfView);
+        object.addProperty("nearPlane", nearPlane);
+        object.addProperty("farPlane", farPlane);
+        object.addProperty("active", activeCamera == this);
+        object.addProperty("type", this.getType());
+
+        return object.toString();
     }
 
     @Override
     public void deserialize(String data) {
+        JsonObject object = JsonParser.parseString(data).getAsJsonObject();
 
+        fieldOfView = object.get("fieldOfView").getAsFloat();
+        nearPlane = object.get("nearPlane").getAsFloat();
+        farPlane = object.get("farPlane").getAsFloat();
+
+        recalculateProjectionMatrix(Window.getInstance().getAspectRatio());
+
+        if (activeCamera == null || object.get("active").getAsBoolean()) {
+            activeCamera = this;
+        }
     }
 
     /**
@@ -117,7 +157,38 @@ public class CameraComponent extends Component {
         }
     }
 
+    /**
+     * Gets the transform component of the camera.
+     * @return The transform component of the camera.
+     */
     public TransformComponent getTransform() {
         return transformComponent;
+    }
+
+    public float getFieldOfView() {
+        return fieldOfView;
+    }
+
+    public void setFieldOfView(float fieldOfView) {
+        this.fieldOfView = fieldOfView;
+        recalculateProjectionMatrix(Window.getInstance().getAspectRatio());
+    }
+
+    public float getNearPlane() {
+        return nearPlane;
+    }
+
+    public void setNearPlane(float nearPlane) {
+        this.nearPlane = nearPlane;
+        recalculateProjectionMatrix(Window.getInstance().getAspectRatio());
+    }
+
+    public float getFarPlane() {
+        return farPlane;
+    }
+
+    public void setFarPlane(float farPlane) {
+        this.farPlane = farPlane;
+        recalculateProjectionMatrix(Window.getInstance().getAspectRatio());
     }
 }

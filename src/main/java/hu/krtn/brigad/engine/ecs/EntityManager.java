@@ -120,6 +120,20 @@ public class EntityManager {
             return list.toArray(new Entity[0]);
     }
 
+    /**
+     * This method returns the first entity in the game with the given hash id.
+     * @param hashId The hash id of the entity to be returned.
+     * @return The entity with the given hash id or null if it does not exist.
+     */
+    public Entity getEntityByHashId(String hashId) {
+        for (Entity entity : entities) {
+            if (entity.getHashId().equals(hashId)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
     public boolean isDirty() {
         return dirty;
     }
@@ -127,5 +141,4 @@ public class EntityManager {
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }
-
 }

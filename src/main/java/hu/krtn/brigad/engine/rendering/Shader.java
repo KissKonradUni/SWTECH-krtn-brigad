@@ -3,6 +3,7 @@ package hu.krtn.brigad.engine.rendering;
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.ecs.component.LightComponent;
+import hu.krtn.brigad.engine.resources.ResourceManager;
 import hu.krtn.brigad.engine.window.Logger;
 import org.joml.Matrix4f;
 
@@ -26,7 +27,10 @@ public class Shader {
     private static int activeShader = -1;
 
     private List<Entity> lightsCache = new ArrayList<>();
-    private List<LightComponent> compCache = new ArrayList<>();
+    private final List<LightComponent> compCache = new ArrayList<>();
+
+    private String vertexShaderPath;
+    private String fragmentShaderPath;
 
     public void setLights(List<Entity> lightsCache) {
         if (this.lightsCache.equals(lightsCache)) return;
@@ -76,8 +80,9 @@ public class Shader {
      * Creates a shader program from the given vertex and fragment shaders.
      * @param vertexShader The vertex shader.
      * @param fragmentShader The fragment shader.
+     * @param raw Redundant parameter, used to differentiate between the constructors.
      */
-    public Shader(String vertexShader, String fragmentShader) {
+    private Shader(String vertexShader, String fragmentShader, boolean raw) {
         handle = glCreateProgram();
         int vertexShaderHandle   = createShader(vertexShader  , ShaderTypes.VERTEX_SHADER  );
         int fragmentShaderHandle = createShader(fragmentShader, ShaderTypes.FRAGMENT_SHADER);
@@ -95,6 +100,22 @@ public class Shader {
 
         glDeleteShader(vertexShaderHandle  );
         glDeleteShader(fragmentShaderHandle);
+    }
+
+    /**
+     * Creates a shader program from the given vertex and fragment shader files from the given paths.
+     * @param vertexShaderPath The path of the vertex shader.
+     * @param fragmentShaderPath The path of the fragment shader.
+     */
+    public Shader(String vertexShaderPath, String fragmentShaderPath) {
+        this(
+            ResourceManager.getInstance().readTextFile(vertexShaderPath),
+            ResourceManager.getInstance().readTextFile(fragmentShaderPath),
+            false
+        );
+
+        this.vertexShaderPath = vertexShaderPath;
+        this.fragmentShaderPath = fragmentShaderPath;
     }
 
     /**
@@ -139,18 +160,22 @@ public class Shader {
                 glUniform3f(viewPosLoc, camera.getTransform().getPosition().x, camera.getTransform().getPosition().y, camera.getTransform().getPosition().z);
         }
 
-        glUniform3f(getUniformLocation("PBRData.albedo"),    material.getBaseColor().x, material.getBaseColor().y, material.getBaseColor().z);
-        glUniform1f(getUniformLocation("PBRData.metallic"),  material.getMetallic());
-        glUniform1f(getUniformLocation("PBRData.roughness"), material.getRoughness());
+        // TODO: this is dogsh*t
+        //glUniform3f(getUniformLocation("PBRData.albedo"),    material.getBaseColor().x, material.getBaseColor().y, material.getBaseColor().z);
+        glUniform1i(getUniformLocation("albedo"), 0);
+        glUniform1f(getUniformLocation("f_PBRData.metallic"),         material.getMetallic());
+        glUniform1f(getUniformLocation("f_PBRData.roughness"),        material.getRoughness());
+        glUniform1f(getUniformLocation("f_PBRData.ambientOcclusion"), material.getAmbientOcclusion());
+        glUniform1f(getUniformLocation("f_PBRData.emission"),         material.getEmission());
 
         int lightCount = lightsCache.size();
-        glUniform1i(getUniformLocation("lightCount"), lightCount);
+        glUniform1i(getUniformLocation("f_numLights"), lightCount);
 
         for (int i = 0; i < lightCount; i++) {
             LightComponent light = compCache.get(i);
-            glUniform3f(getUniformLocation("lights[" + i + "].position"), light.getPosition().x, light.getPosition().y, light.getPosition().z);
-            glUniform3f(getUniformLocation("lights[" + i + "].color"),    light.getColor().x, light.getColor().y, light.getColor().z);
-            glUniform1f(getUniformLocation("lights[" + i + "].intensity"), light.getIntensity());
+            glUniform3f(getUniformLocation("f_lights[" + i + "].position"), light.getPosition().x, light.getPosition().y, light.getPosition().z);
+            glUniform3f(getUniformLocation("f_lights[" + i + "].color"),    light.getColor().x, light.getColor().y, light.getColor().z);
+            glUniform1f(getUniformLocation("f_lights[" + i + "].intensity"), light.getIntensity());
         }
     }
 
@@ -173,12 +198,20 @@ public class Shader {
      * @param name The name of the uniform.
      * @return The location of the uniform.
      */
-    private int getUniformLocation(String name) {
+    protected int getUniformLocation(String name) {
         if (uniforms.containsKey(name)) {
             return uniforms.get(name);
         }
         int loc = glGetUniformLocation(handle, name);
         uniforms.put(name, loc);
         return loc;
+    }
+
+    public String getVertexShaderPath() {
+        return vertexShaderPath;
+    }
+
+    public String getFragmentShaderPath() {
+        return fragmentShaderPath;
     }
 }

@@ -11,6 +11,7 @@ import hu.krtn.brigad.engine.window.Logger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The Entity class represents an entity in the game world.
@@ -20,6 +21,13 @@ public class Entity extends Serializable {
 
     private String name;
     private ArrayList<Component> components;
+    private final String hashId;
+
+    /**
+     * A hash table that stores the entities by their hash id from a loaded save file.
+     * This is necessary to remap the entities that are only referenced by their hash id.
+     */
+    private static final HashMap<String, String> DeserializedEntityHashIdTable = new HashMap<>();
 
     /**
      * Creates a new entity with the given name.
@@ -29,6 +37,7 @@ public class Entity extends Serializable {
     protected Entity(String name, boolean persistent) {
         this.name       = name;
         this.components = new ArrayList<>();
+        this.hashId     = persistent ? SaveManager.getInstance().generateHashId() : null;
 
         EntityManager.getInstance().registerEntity(this);
         if (persistent)
@@ -52,6 +61,7 @@ public class Entity extends Serializable {
         JsonObject object = new JsonObject();
         object.addProperty("name", name);
         object.addProperty("type", getClass().getCanonicalName());
+        object.addProperty("hashId", hashId);
 
         JsonArray components = new JsonArray();
         this.components.forEach(component -> components.add(JsonParser.parseString(component.serialize())));
@@ -66,6 +76,8 @@ public class Entity extends Serializable {
      * <li>The component should have a type field, which is the canonical name of the class. (Done automatically by the Component class)
      * <li>The component should have a deserialize method, which takes a JSON string as a parameter.
      * <li>The component should have an empty constructor.
+     * <br><br>
+     * <p><b>! The loaded entity will have a new hashId !</b></p>
      * @see SaveManager
      * @param data The JSON string.
      */
@@ -77,6 +89,12 @@ public class Entity extends Serializable {
         // If the name is set in the JSON, use that.
         if (this.name == null)
             this.name = object.get("name").getAsString();
+
+        // Deserialize the hash id.
+        String hashId = object.get("hashId").getAsString();
+        // If the hash id is not null, register the entity in the hash id table.
+        if (hashId != null)
+            DeserializedEntityHashIdTable.put(hashId, this.hashId);
 
         // Deserialize the components.
         this.components = new ArrayList<>();
@@ -96,7 +114,14 @@ public class Entity extends Serializable {
                 Component component = (Component) constructor.newInstance();
                 // Deserialize the component.
                 component.deserialize(jsonComponent.toString());
-                this.components.add(component);
+                // Fulfill the dependencies of the component.
+                try {
+                    component.fulfillDependencies(this);
+                } catch (ComponentDependencyException e) {
+                    Logger.error(e.getMessage());
+                }
+
+                this.addComponent(component);
             } catch (ClassNotFoundException e) {
                 Logger.error("Component class not found: " + componentType);
             } catch (NoSuchMethodException e) {
@@ -150,5 +175,17 @@ public class Entity extends Serializable {
                 return component;
         }
         return null;
+    }
+
+    /**
+     * Returns the hash id of the entity.
+     * @return The hash id of the entity.
+     */
+    public String getHashId() {
+        return hashId;
+    }
+
+    public static String resolveDeserializedEntityHashId(String hashId) {
+        return DeserializedEntityHashIdTable.get(hashId);
     }
 }
