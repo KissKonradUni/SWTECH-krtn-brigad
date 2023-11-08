@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
+import hu.krtn.brigad.engine.ecs.EntityManager;
 import org.joml.Vector3f;
 
 public class LightComponent extends Component {

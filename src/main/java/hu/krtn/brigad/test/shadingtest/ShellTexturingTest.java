@@ -19,7 +19,7 @@ import org.joml.Vector4f;
 public class ShellTexturingTest {
 
     public static void main(String[] args) {
-        Window window = Window.initInstance(1920, 1080, "Shell Texturing Test", 60.0f, true, false, 16);
+        Window window = Window.initInstance(2560, 1440, "Shell Texturing Test", 60.0f, true, false, 16);
         window.init();
 
         EntityFactory
