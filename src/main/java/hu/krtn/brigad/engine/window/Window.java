@@ -129,7 +129,7 @@ public class Window {
     private float tickRate;
     private boolean vsync;
     private boolean fullscreen;
-    private int msaa = 0;
+    private int msaa;
 
     /**
      * Creates a new window with the given width, height and title.
@@ -233,6 +233,11 @@ public class Window {
             glfwGetWindowSize(windowHandle, pWidth, pHeight);
 
             GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+            if (videoMode == null) {
+                Logger.error("Failed to get the video mode of the primary monitor");
+                return;
+            }
 
             glfwSetWindowPos(
                 windowHandle,

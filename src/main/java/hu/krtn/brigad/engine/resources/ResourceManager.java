@@ -156,6 +156,9 @@ public class ResourceManager {
             for (int i = 0; i < materialCount; i++) {
                 try (AIMaterial material = AIMaterial.create(scene.mMaterials().get(i))) {
                     materials[i] = processMaterial(material);
+                } catch (NullPointerException e) {
+                    Logger.error("Error loading material: " + path);
+                    return null;
                 }
             }
 
@@ -166,6 +169,9 @@ public class ResourceManager {
                 try (AIMesh mesh = AIMesh.create(scene.mMeshes().get(i))) {
                     meshes[i] = processMesh(mesh);
                     materialIndices[i] = mesh.mMaterialIndex();
+                } catch (NullPointerException e) {
+                    Logger.error("Error loading mesh: " + path);
+                    return null;
                 }
             }
 

@@ -21,7 +21,6 @@ import static hu.krtn.brigad.engine.resources.ResourceManager.*;
  */
 public class RendererComponent extends Component {
 
-    //TODO: Implement file system capabilities
     private Mesh mesh;
     private Material material;
     private Texture diffuseTexture;

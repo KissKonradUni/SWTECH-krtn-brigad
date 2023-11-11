@@ -17,15 +17,15 @@ public class CameraComponent extends Component {
     /**
      * The field of view of the camera in degrees.
      */
-    private float fieldOfView = 70.0f;
+    private float fieldOfView;
     /**
      * The near plane of the camera.
      */
-    private float nearPlane = 0.1f;
+    private float nearPlane;
     /**
      * The far plane of the camera.
      */
-    private float farPlane = 1000.0f;
+    private float farPlane;
 
     /**
      * The projection matrix of the camera.
