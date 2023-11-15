@@ -15,8 +15,8 @@ class MarkdownParserElement extends HTMLElement {
 		let underlineRegexp = /(\+\+)(.*?)\1/;
 		let inlineCodeRegexp = /(\`)(.*?)\1/;
 
-		let imgClassRegexp = /!\[(.*?)\]\{(.*?)\}\((.*?)\)/;
 		let imgRegexp = /!\[(.*?)\]\{(.*?)\}\{(.*?)\}\((.*?)\)/;
+		let imgClassRegexp = /!\[(.*?)\]\{(.*?)\}\((.*?)\)/;
 		let linkRegexp = /\[(.*?)\]\((.*?)\)/;
 
         let mathRegexp = /\$\$(.*?)\$\$/;
@@ -121,11 +121,11 @@ class MarkdownParserElement extends HTMLElement {
 				while (underlineRegexp.test(result)) {
 					result = result.replace(underlineRegexp, "<u>$2</u>");
 				}
-				while (imgClassRegexp.test(result)) {
-					result = result.replace(imgClassRegexp, '<img class="$2" src="$3" alt="$1">');
-				}
 				while (imgRegexp.test(result)) {
 					result = result.replace(imgRegexp, '<img src="$4" alt="$1" width="$2" height="$3">');
+				}
+				while (imgClassRegexp.test(result)) {
+					result = result.replace(imgClassRegexp, '<img class="$2" src="$3" alt="$1">');
 				}
 				while (linkRegexp.test(result)) {
 					result = result.replace(linkRegexp, '<a href="$2">$1</a>');
