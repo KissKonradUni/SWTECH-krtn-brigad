@@ -49,10 +49,6 @@ public class EntityFactory {
         // No need to register the entity, because it is registered in the constructor.
     }
 
-    public Component getComponent(Class<? extends Component> transformComponentClass) {
-        return entity.getComponent(transformComponentClass);
-    }
-
     /**
      * Creates a new Entity with the given name.
      * @param name The name of the entity.

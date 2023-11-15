@@ -8,7 +8,9 @@ import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.ecs.component.LightComponent;
 import hu.krtn.brigad.engine.ecs.component.RendererComponent;
 import hu.krtn.brigad.engine.ecs.component.TransformComponent;
+import hu.krtn.brigad.engine.logic.Logic;
 import hu.krtn.brigad.engine.logic.LogicManager;
+import hu.krtn.brigad.engine.logic.Query;
 import hu.krtn.brigad.engine.rendering.Texture;
 import hu.krtn.brigad.engine.resources.ResourceManager;
 import hu.krtn.brigad.engine.resources.ResourceManager.StaticModelData;
@@ -35,6 +37,12 @@ public class TestGame {
         EntityFactory
             .create("Camera")
             .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f, 5.0f), new Vector3f(0.0f), new Vector3f(1.0f)))
+            .addComponent(new CameraComponent(70.0f, 0.1f, 1000.0f))
+            .buildAndRegister();
+
+        EntityFactory
+            .create("Camera2")
+            .addComponent(new TransformComponent(new Vector3f(10.0f, 0.0f, -5.0f), new Vector3f(0.0f, 90.0f, 0.0f), new Vector3f(1.0f)))
             .addComponent(new CameraComponent(70.0f, 0.1f, 1000.0f))
             .buildAndRegister();
 
@@ -136,6 +144,33 @@ public class TestGame {
 
         LogicManager.getInstance().registerLogic(new TestLogic());
         LogicManager.getInstance().registerLogic(new CageLogic());
+
+        //noinspection unchecked
+        LogicManager.getInstance().registerLogic(new Logic(new Query(new Class[] {CameraComponent.class})) {
+            float time = 0.0f;
+            int activeCamera = 0;
+
+            @Override
+            protected void update(Entity[] queryTargets, float fixedDeltaTime) {
+            }
+
+            @Override
+            protected void render(Entity[] queryTargets, float deltaTime) {
+                time += deltaTime;
+
+                if (time > 1.0f) {
+                    time = 0.0f;
+
+                    if (activeCamera == 0) {
+                        ((CameraComponent) queryTargets[0].getComponent(CameraComponent.class)).setActive();
+                        activeCamera = 1;
+                    } else {
+                        ((CameraComponent) queryTargets[1].getComponent(CameraComponent.class)).setActive();
+                        activeCamera = 0;
+                    }
+                }
+            }
+        });
 
         ExtraDataManager.getInstance().registerData("High-score", new IntData(54212));
 

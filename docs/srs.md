@@ -24,6 +24,11 @@ Még fontos, hogy tisztán OpenGL-t használunk a 3D-s grafikához. Ez a dönté
 így a játékmotorunkat bármilyen platformra könnyen át lehet majd portolni.
 És végsőként a motornak gyorsnak kell maradnia még a legtöbb eszközön is.
 
+Íme egy Use-Case diagram, amely bemutatja a játékmotorunkat, és a felhasználók által elvégzett műveleteket:
+![Use-Case diagram]{scale-img}(./img/Use-Case.png)
+(Egy általánosított kifejtés kis- vagy egyéni projektekhez.)
+
+
 # A rendszer funkciói
 > Specific Requirements
 
@@ -56,7 +61,8 @@ A fényeknek ezentúl fontos tulajdonsága, hogy a PBR modellben már bevállt m
 intenzitásuk csökken egy quadratikus függvény szerint.
 
 Ezentúl a fényeknek is van színe, amelyet a rajzolás során a megjelenített anyag színével össze kell
-szorozni, hogy a megfelelő színt kapjuk.
+szorozni, hogy a megfelelő színt kapjuk. A fények egy inteziással is rendelkeznek, amely azt jelenti,
+hogy a fények mennyire erősek, milyen távolságig világítanak.
 
 ### A modellek anyagai
 > Materials
@@ -127,6 +133,37 @@ fények színétől, és az intenzitásától, hanem mindig ugyanaz marad. Ez te
 anyag esetén van jelen, csak azoknál amelyek képesek fényt kibocsájtani.
 
 Ezt nem kell megszorozni a fények színével, mert ez a szín mindig ugyanaz marad.
+
+### Framebuffer objektumok
+> Framebuffer objects
+
+A framebuffer objektumok olyan objektumok, amelyek a megjelenítés során a képet tárolják. Ezzel több fázisra
+bontjuk a megjelenítést, és a végeredményt csak a végén jelenítjük meg. A framebuffer objektumoknak többféle
+típusa is van. A legfontosabb használati területei az implementálás során a következők:
+
+
+- `Base rendering pass` - A base rendering pass egy olyan framebuffer lesz, amely a megjelenítés első fázisában lesz használva. Ebben a fázisban a megfelelő shader szerint (amely általában PBR) megjelenítésre kerül a játékban található összes éppen aktív entitás. A háttere ennek átlátszóra lesz hagyva. Ez a réteg egy `color` és egy `depth` csatolmányt fog tartalmazni.
+- `Skybox rendering` - A skybox egy úgynevezett `HDRI` kép, amely egy gömbfelületre van vetítve. A skybox azokra a területekre lesz kirajzolva, amelyek az első fő rajzolási lépés során átlátszónak lettek meghagyva. Ennek a technikának köszönhetően a háttér egy geometria nélkül is megoldható.
+- `Shadow pass from lights` - A shadow pass egy olyan framebuffer lesz, amely során a felől lesz ferméve a távolság minden entitásra. Ez a réteg egy `depth` csatolmányt fog tartalmazni, és a fények által vetített árnyékokat fogja felhasználni. Ezt felhasználva fogjuk tudni elkészíteni a valós idejű árnyékokat.
+- `Shadow pass from camera` - A shadow pass egy olyan framebuffer lesz, amely során a fények árnyékai kerülnek megjelenítésre. Ez a réteg egy `depth` csatolmányt fog tartalmazni, és a fények által vetített árnyékokat fogja felhasználni.
+- `Transparent rendering pass` - A transparent rendering pass egy olyan framebuffer lesz, amely (általában) a megjelenítés során az árnyékok után következik be. Ebben a fázisban az átlátszó entitások kerülnek megjelenítésre. Ez a réteg is egy `color` és egy `depth` csatolmányt fog tartalmazni.
+- `Post-processing rendering pass` - A post-processing rendering pass egy olyan framebuffer lesz, amelyben a post-processing effektek kerülnek megjelenítésre. Ez a réteg annyi alkalommal lesz használva, ahány post-processing effektet szeretnénk alkalmazni. Ez a réteg is egy `color` és egy `depth` csatolmányt fog tartalmazni.
+Egyéb rétegek, amelyek a szerkesztőben lesznek használva:
+
+
+- `Selectable pass` - A selectable pass egy olyan framebuffer lesz, amely során minden entitás egy külön hash alapján készült színnel fog megjelenni. Ez a réteg egy `color` csatolmányt fog tartalmazni. Ezzel a színnel beazonosítható hogy mely objektumra kattintott a szerkesztőben a felhasználó.
+- `Selection mark pass` - A selection mark pass egy olyan framebuffer lesz, amely során a kiválasztott entitásokra egy külön jelölés kerül megjelenítésre. Ez a réteg egy `color` csatolmányt fog tartalmazni.
+- `Wireframe pass` - (Opcionálisan állítható) A wireframe pass egy olyan framebuffer lesz, amely során minden entitás a vertexek által alkotott éle kerül megjelenítésre. Ez a réteg egy `color` csatolmányt fog tartalmazni.
+
+### Árnyékok
+> Shadows
+
+A játékmotorokban a legtöbb esetben a fények árnyékot is vetnek. Az árnyékokat a motor két féle módon
+tudja megjeleníteni. Az egyik módszer a `Percentage Closer Filtering`, amely egy valós időben történő
+árnyék megjelenítési módszer. Ez a módszer a legtöbb esetben elég jó eredményt ad, de a legtöbb esetben
+nem elég pontos. A másik módszer egy a `Shadow Map`-re alapuló módszer, amely egy előre számolt árnyék
+megjelenítési módszer. Ez a módszer sokkal pontosabb, nagyobb felbontású árnyékokat eredményez, de
+nem változik valós időben, és a legtöbb esetben nem is lehet változtatni a fények helyzetén.
 
 ### Post-processing effektek
 > Post-processing effects
@@ -462,6 +499,130 @@ Ilyen például a fent említett fizikai szimuláció, amelynek a számításai 
 függően változhatnak. Minél nagyobb az eltelt idő, annál pontatlanabbak lesznek a számítások, és annál nagyobb lesz a 
 hiba, arról nem is beszélve, hogy mivel a fizikai szimuláció ütközésdetektáláson alapszik, amennyiben a két lépés között
 akkora utat tett meg a test, hogy a másik testen átment teljesen, akkor a szimuláció nem fogja észrevenni azt.
+
+### Eseménykezelés
+> Event handling
+
+Minden játéknak szüksége van eseménykezelésre, amely a játékosok interakcióját jelenti a játékkal. Az eseménykezelés
+a játékmotorokban többféle módon is megvalósítható, amelyek közül mi kettő módszert is használni fogunk.
+
+Az egyik módszer az, hogy a játékfejlesztőknek egy olyan függvényt kell hogy írniuk, amelyet a motor a játék
+futása során fog meghívni, amikor egy esemény történik. (`Callback`) Ez a módszer nagyon egyszerű, és gyors,
+de nem rugalmas, mert a játékfejlesztőknek minden esetben egy új függvényt kell hogy írniuk, amelyet a motor
+meghívhat. Erre a módszerre a Retained Mode GUI-nál fogunk példát látni.
+
+A másik módszer az, hogy a játékfejlesztőknek elérhető lesz egy Singleton osztály a motorból, amelyen keresztül
+azonnal lekérdezhetik egyes események állapotát, mint például egy gomb az adott tick/képkocka alatt került lenyomásra,
+felengedésre, vagy lenyomva van tartva, az egér mennyit mozgott az előző időlépés óta, és még sok más. Ez a módszer
+nagyon egyszerűen implementálható, és a reszponzivitása sokkal jobb, ebből kifolyólag sokkal alkalmasabb a játék 
+aktív bemeneteinek kezelésére. A UI-nál ennek ellenére szigorúan az Immediate Mode GUI fogja ezt használni, mivel
+minden más esetben a másik módszer alkalmasabb.
+
+## A kész játék fájlformátuma
+> The file format of the finished game
+
+A kész játék futtathatójának várható fájlformátuma egy `.jar` a Java nyelv miatt. A játék által felhasznált
+fájlok, mint például a modellek, a textúrák, és a hangok, egy külön mappában lesznek tárolva, amelyet a játék
+futtatásakor a játék a saját mappájában fog keresni. A játék futtatásához szükséges Java Runtime Environment
+verziója a 11-es verzió lesz, amelyet a játék telepítésekor fogunk telepíteni, ha az nincs még telepítve.
+
+## Geometriai és shader adatok tárolása
+> Storing geometry and shader data
+
+A játékmotorokban a geometriai és shader adatok tárolása egy nagyon fontos része a tervezésnek. Ezeket az alábbi
+módon tervezzük megoldani.
+
+### A modellek
+> Models
+
+A modellek a játékmotorokban egy olyan adatok, amelyek a játékban található objektumokat, azaz entitásokat képviselő
+geometria adatokat tartalmazzák. A modelleket az alábbi formátumokban tárolja a játékmotorunk:
+
+Az adatok többsége elsősorban a `vertexBufferObject`-ban lesz tárolva, amely egy olyan adatszerkezet, amely a
+model pontjainak a pozícióját, textúra koordinátáit, és normálvektorait tartalmazza, stb. tartalmazza.
+Ezentúl a modelleknek lesz egy `indexBufferObject`-ja is, amely a `vertexBufferObject`-ban található pontok
+összekötésének a sorrendjét tartalmazza. 
+
+Ezeket az objektumokat minden beállításukkal együtt tárolja egy `vertexArrayObject`, amelynek a segítségével
+egy hívással tudjuk a megfelelő modell adatait a videókártyán aktívvá tenni, majd szintén egy hívással tudjuk
+kirajzolni.
+
+Jelenleg az egyetlen támogatott fájlformátum modellekhez a `.gltf` formátum lesz, amelyet majd később követ a mi
+saját formátumunk is.
+
+### A shader-ek
+> Shaders
+
+A shaderek a játékmotorokban egy olyan adatok, amelyek a játékban található objektumokat, azaz entitásokat
+megjelenítő algoritmusokat tartalmazzák. A shadereket az alábbi formátumokban tárolja a játékmotorunk:
+
+A shader rendelkezik egy a GLSL-re épülő saját extra formátummal, amely segít a motornak beazonosítani a
+szükséges uniformok, layoutok, structok és egyébb szükséges adatok elhelyezkedését már betöltési időben, és
+megfelelő `#pragma` operátorokkal lehetőve teszi opcionálisan engedélyezett kódrészletek létrehozását.
+
+Bár az alapértelmezett shader az objektumok megjelenítésére a játékmotorban már megtalálható PBR shader, de
+a játékfejlesztőknek lehetőségük lesz saját shader-eket is létrehozni, amelyeket a játék futása során tudnak
+használni.
+
+A shadert a `rendererComponent`-ben tároljuk, amelyet a játékfejlesztők a játékfájlokban tudnak majd megadni.
+(Ez még erősen változás alatt állhat!)
+
+A shaderek becachelésre kerülnek a fájlneveik szerint, így a játék futása során nem kell újra betölteni őket,
+amennyiben már egyszer használták őket.
+
+## Egyéb funkciók
+> Other features
+
+A motor sok nem besorolható funkcióval is rendelkezik, amelyeket a játékfejlesztők használhatnak a játékuk
+fejlesztése során.
+
+### Az ablak beállításai
+> Window settings
+
+Az ablak teljesen kontrollálható lesz a játékfejlesztők számára, hasonló módon mint a piacvezető játékmotorokban.
+A játékfejlesztőknek lehetőségük lesz a következő beállításokat megadni az ablakhoz:
+
+
+- Méret
+- Cím
+- Ikon
+- VSync és/vagy Képkocka limit
+- Teljes képernyő
+- Ablak átméretezhetősége
+- Felbontás
+- stb.
+
+### Utility osztályok
+> Utility classes
+
+A utility osztályokért tisztán az LWJGL felel, amelyeket a játékfejlesztőknek lehetőségük lesz használni.
+Ilyenek például a következők:
+
+
+- `Vector2f` - Egy 2D-s vektor
+- `Vector3f` - Egy 3D-s vektor
+- `Matrix4x4f` - Egy 4x4-es mátrix
+- `Quaternion` - Egy quaternion
+- `Color` - Egy szín
+- stb.
+Ezek az osztályok már tartalmazzák a szükséges metódusokat, számítási lehetőségeket, amelyekkel a játékfejlesztők
+tudják használni azokat.
+
+### Kamerák kezelése
+> Camera handling
+
+A `CameraComponent` osztály rendelkezik egy statikus `activeCamera` változóval, amely a jelenleg aktív kamerát
+tartalmazza. Ezzel ha az aktív kezelt kamerát megszeretnénk változtatni, akkor csak egy másik kamerán meg kell
+hívni a `setActiveCamera` metódust, és a motor a többi helyen már automatikusan használni fogja az új kamerát.
+
+### QoL funkciók
+> Quality of life features
+
+A motor rendelkezni fog pár a felhasználást megkönnyítő funkcióval, amelyeket a játékfejlesztők tudnak használni.
+Ilyenek például a következők:
+- `FPS`, `frameTime` és egyéb `timing` adatok lekérdezése
+- A logikai classok teljes elérést kapnak a `time`, `deltaTime` és `fixedDeltaTime` változókhoz
+- Ezek egy IMGUI felületen is elérhetőek lesznek
 
 # Használhatóság
 > Usability
