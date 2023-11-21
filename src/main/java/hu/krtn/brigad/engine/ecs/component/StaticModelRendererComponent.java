@@ -19,7 +19,7 @@ import static hu.krtn.brigad.engine.resources.ResourceManager.*;
  * The renderer component is used to render meshes.
  * It contains a mesh and a shader.
  */
-public class RendererComponent extends Component {
+public class StaticModelRendererComponent extends Component {
 
     private Mesh mesh;
     private Material material;
@@ -38,7 +38,7 @@ public class RendererComponent extends Component {
      * @param mesh The mesh to be rendered.
      * @param shader The shader to be used to render the mesh.
      */
-    private RendererComponent(Mesh mesh, Material material, Texture diffuseTexture, Shader shader) {
+    private StaticModelRendererComponent(Mesh mesh, Material material, Texture diffuseTexture, Shader shader) {
         super();
         this.mesh = mesh;
         this.material = material;
@@ -54,7 +54,7 @@ public class RendererComponent extends Component {
         this.fragmentShaderPath = null;
     }
 
-    public RendererComponent(StaticModelData data, Texture diffuseTexture, Shader shader) {
+    public StaticModelRendererComponent(StaticModelData data, Texture diffuseTexture, Shader shader) {
         this(data.mesh, data.material, diffuseTexture, shader);
 
         this.meshPath = data.path;
@@ -63,7 +63,7 @@ public class RendererComponent extends Component {
         this.fragmentShaderPath = shader.getFragmentShaderPath();
     }
 
-    public RendererComponent() {
+    public StaticModelRendererComponent() {
         this(null, null, null, null);
     }
 
@@ -107,10 +107,6 @@ public class RendererComponent extends Component {
 
     public Mesh getMesh() {
         return mesh;
-    }
-
-    public Shader getShader() {
-        return shader;
     }
 
     /**

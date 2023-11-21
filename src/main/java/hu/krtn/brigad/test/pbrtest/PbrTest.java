@@ -3,7 +3,7 @@ package hu.krtn.brigad.test.pbrtest;
 import hu.krtn.brigad.engine.ecs.EntityFactory;
 import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.ecs.component.LightComponent;
-import hu.krtn.brigad.engine.ecs.component.RendererComponent;
+import hu.krtn.brigad.engine.ecs.component.StaticModelRendererComponent;
 import hu.krtn.brigad.engine.ecs.component.TransformComponent;
 import hu.krtn.brigad.engine.rendering.Material;
 import hu.krtn.brigad.engine.rendering.Texture;
@@ -34,7 +34,7 @@ public class PbrTest {
                 EntityFactory
                     .create("Sphere")
                     .addComponent(new TransformComponent(new Vector3f(x * 1.2f - 6.0f, y * 1.2f - 6.0f, -10.0f), new Vector3f(), new Vector3f(0.5f, 0.5f, 0.5f)))
-                    .addComponent(new RendererComponent(data, new Texture(new Texture.ByteColor(diffuse)),
+                    .addComponent(new StaticModelRendererComponent(data, new Texture(new Texture.ByteColor(diffuse)),
                         ResourceManager.getInstance().loadShader(
                             "./resources/shaders/vertex/pbr.glsl",
                             "./resources/shaders/fragment/pbr.glsl"

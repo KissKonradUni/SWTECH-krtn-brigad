@@ -4,7 +4,7 @@ import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.EntityFactory;
 import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.ecs.component.LightComponent;
-import hu.krtn.brigad.engine.ecs.component.RendererComponent;
+import hu.krtn.brigad.engine.ecs.component.StaticModelRendererComponent;
 import hu.krtn.brigad.engine.ecs.component.TransformComponent;
 import hu.krtn.brigad.engine.logic.Logic;
 import hu.krtn.brigad.engine.logic.LogicManager;
@@ -33,7 +33,7 @@ public class ShellTexturingTest {
         EntityFactory
             .create("BaseSphere")
             .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f, -5.0f), new Vector3f(0.0f), new Vector3f(3.0f)))
-            .addComponent(new RendererComponent(
+            .addComponent(new StaticModelRendererComponent(
                 model,
                 ResourceManager.getInstance().loadTexture("./resources/textures/shell_test.png"),
                 ResourceManager.getInstance().loadShader("./resources/shaders/vertex/pbr.glsl", "./resources/shaders/fragment/pbr.glsl")
@@ -44,7 +44,7 @@ public class ShellTexturingTest {
             EntityFactory
                 .create("Sphere0" + i)
                 .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f - (i * i * (0.0005f / 64.0f)), -5.0f), new Vector3f(0.0f), new Vector3f(3.0f + i * (0.025f / 8.0f))))
-                .addComponent(new RendererComponent(
+                .addComponent(new StaticModelRendererComponent(
                     model,
                     ResourceManager.getInstance().loadTexture("./resources/textures/shell_test.png"),
                     new ShellShader("./resources/shaders/vertex/shell.glsl", "./resources/shaders/fragment/shell.glsl", i)
@@ -55,7 +55,7 @@ public class ShellTexturingTest {
         EntityFactory
             .create("Backdrop")
             .addComponent(new TransformComponent(new Vector3f(0.0f, -5.0f, -3.0f), new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(50.0f, 20.0f, 20.0f)))
-            .addComponent(new RendererComponent(
+            .addComponent(new StaticModelRendererComponent(
                 ResourceManager.getInstance().loadStaticModel("./resources/models/backdrop.gltf")[0],
                 new Texture(new Texture.ByteColor(new Vector4f(1.0f, 1.0f, 1.0f, 1.0f))),
                 ResourceManager.getInstance().loadShader("./resources/shaders/vertex/pbr.glsl", "./resources/shaders/fragment/pbr.glsl")

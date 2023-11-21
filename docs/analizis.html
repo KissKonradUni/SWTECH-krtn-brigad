@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analízis Modell</title>
+    <script src="markdown.js" defer></script>
+    <link rel="stylesheet" href="uml.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+<p>
+    <a href="h3.html">Vissza</a>
+</p>
+
+<h1>KRTN Brigád - Analízis Modell</h1>
+<quote-element>Analysis Model</quote-element>
+
+<h3>Készítették:</h3>
+<quote-element>Created by:</quote-element>
+<ul>
+    <li>- Csákó Balázs</li>
+    <li>- Bodnár Gergely</li>
+    <li>- Kola Sándor</li>
+    <li>- Kiss Konrád Soma</li>
+</ul>
+
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [
+                ["$", "$"],
+                ["\\(", "\\)"],
+            ],
+            processEscapes: true,
+        },
+    };
+
+    let markdown = fetch("analizis.md", { cache: "reload" })
+        .then((response) => response.text())
+        .then((text) => {
+            let markdown = document.createElement("markdown-parser");
+            markdown.setAttribute("table-of-contents-title", "Tartalomjegyzék");
+            markdown.innerHTML = text;
+            document.body.appendChild(markdown);
+
+            MathJax.typeset();
+        });
+</script>
+</body>
+</html>

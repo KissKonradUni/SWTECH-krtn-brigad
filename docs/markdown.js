@@ -21,6 +21,13 @@ class MarkdownParserElement extends HTMLElement {
 
         let mathRegexp = /\$\$(.*?)\$\$/;
 
+		// UML syntax with extra markers for static, final, etc.
+		// Put everything between {} in a <syntax-highlight> element
+		// with the content as the class too
+
+		let umlLine = /UML: (.*)/;
+		let umlRegex = /(\{([^\{\}]*)\})/;
+
 		let headerCounter = [];
 		let tableOfContents = [];
 
@@ -130,6 +137,16 @@ class MarkdownParserElement extends HTMLElement {
 				while (linkRegexp.test(result)) {
 					result = result.replace(linkRegexp, '<a href="$2">$1</a>');
 				} 
+				while (umlLine.test(result)) {
+					result = result.replace(umlLine, '<p class="uml">$1</p>');
+					while (umlRegex.test(result)) {
+						result = result.replace(umlRegex, '<syntax-highlighter class="$2" title="$2">$2</syntax-highlighter>');
+						result = result.replace('class="+" title="+"', 'class="public" title="public"');
+						result = result.replace('class="-" title="-"', 'class="private" title="private"');
+						result = result.replace('class="~" title="~"', 'class="internal" title="internal"');
+						result = result.replace('class="#" title="#"', 'class="protected" title="protected"');
+					}
+				}
 				return result;
 			})
 			.join("");
@@ -186,6 +203,12 @@ class FakeLinkElement extends HTMLElement {
 	}
 }
 
+class SyntaxHighligterElement extends HTMLElement {
+	constructor() {
+		super();
+	}
+}
+
 window.customElements.define("markdown-parser", MarkdownParserElement);
 window.customElements.define("unordered-list-element", UnorderedListElement);
 window.customElements.define("ordered-list-element", OrderedListElement);
@@ -193,6 +216,7 @@ window.customElements.define("quote-element", QuoteElement);
 window.customElements.define("code-block", CodeBlock);
 window.customElements.define("inline-code", InlineCodeElement);
 window.customElements.define("fake-link", FakeLinkElement);
+window.customElements.define("syntax-highlighter", SyntaxHighligterElement);
 
 var styles = document.head.appendChild(document.createElement("link"));
 styles.rel = "stylesheet";

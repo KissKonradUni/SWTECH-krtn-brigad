@@ -564,7 +564,7 @@ Bár az alapértelmezett shader az objektumok megjelenítésére a játékmotorb
 a játékfejlesztőknek lehetőségük lesz saját shader-eket is létrehozni, amelyeket a játék futása során tudnak
 használni.
 
-A shadert a `rendererComponent`-ben tároljuk, amelyet a játékfejlesztők a játékfájlokban tudnak majd megadni.
+A shadert a `staticModelRendererComponent`-ben tároljuk, amelyet a játékfejlesztők a játékfájlokban tudnak majd megadni.
 (Ez még erősen változás alatt állhat!)
 
 A shaderek becachelésre kerülnek a fájlneveik szerint, így a játék futása során nem kell újra betölteni őket,

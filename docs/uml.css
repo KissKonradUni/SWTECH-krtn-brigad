@@ -1,0 +1,122 @@
+.uml {
+    font-family: monospace;
+    margin: 0.2rem 0;
+    clear: both;
+    padding-left: 2rem;
+    text-indent: -2rem;
+}
+
+syntax-highlighter {
+    font-family: monospace;
+    color: #333;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 0 0.25rem;
+    overflow: auto;
+}
+
+syntax-highlighter:hover::after {
+    content: attr(title);
+    position: absolute;
+    padding: 0.15rem 0.75rem 0.15rem 2.75rem;
+    margin: 0;
+    background-color: #ccc;
+    color: #000;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+    z-index: 1;
+}
+
+syntax-highlighter.public {
+    background-color: #aaf8aa;
+}
+
+syntax-highlighter.private {
+    background-color: #f8aaaa;
+}
+
+syntax-highlighter.protected {
+    background-color: #f8f8aa;
+}
+
+syntax-highlighter.internal {
+    background-color: #aaaaf8;
+}
+
+syntax-highlighter.static {
+    background-color: #f8aaf8;
+}
+
+syntax-highlighter.final {
+    background-color: #aaf8f8;
+}
+
+syntax-highlighter.abstract {
+    background-color: #282828;
+    color: #f8f8f8;
+}
+
+syntax-highlighter.class {
+    background-color: #f88828;
+    color: #282828;
+}
+
+syntax-highlighter.singleton {
+    background-color: #88a8f8;
+    color: #282828;
+}
+
+syntax-highlighter.void {
+    background-color: #a800f8;
+    color: #f8f8f8;
+}
+
+syntax-highlighter.enum {
+    background-color: #0a0;
+    color: #f8f8f8;
+}
+
+syntax-highlighter.override {
+    background-color: #f82828;
+    color: #f8f8f8;
+}
+
+@keyframes rgb {
+    0% {
+        --rgb: 0;
+        background-color: hsl(var(--rgb), 100%, 50%);
+        color: hsl(calc(var(--rgb) + 180), 100%, 50%);
+    }
+    20% {
+        --rgb: 60;
+        background-color: hsl(var(--rgb), 100%, 50%);
+        color: hsl(calc(var(--rgb) + 180), 100%, 50%);
+    }
+    40% {
+        --rgb: 120;
+        background-color: hsl(var(--rgb), 100%, 50%);
+        color: hsl(calc(var(--rgb) + 180), 100%, 50%);
+    }
+    60% {
+        --rgb: 180;
+        background-color: hsl(var(--rgb), 100%, 50%);
+        color: hsl(calc(var(--rgb) + 180), 100%, 50%);
+    }
+    80% {
+        --rgb: 240;
+        background-color: hsl(var(--rgb), 100%, 50%);
+        color: hsl(calc(var(--rgb) + 180), 100%, 50%);
+    }
+    100% {
+        --rgb: 300;
+        background-color: hsl(var(--rgb), 100%, 50%);
+        color: hsl(calc(var(--rgb) + 180), 100%, 50%);
+    }
+}
+
+syntax-highlighter.generic {
+    animation: rgb 2s infinite linear;
+    text-shadow: 0 0 0.15rem #fff;
+    box-shadow: inset 0 0 0.15rem #fff;
+}
