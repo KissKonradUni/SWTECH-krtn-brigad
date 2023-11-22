@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="homework.css" />
+	<title>User Manual</title>
+	<style>
+	        html, body, li {
+	            font-size: 14px;
+	        }
+	
+	        h1 {
+	            font-size: 16pt;
+				margin-bottom: 7px;
+				margin-top: 20px;
+	        }
+	
+	        h2 {
+	            font-family: "Arial", sans-serif;
+	            font-size: 16pt;
+	            font-weight: bold;	
+	            margin-bottom: 15px;
+				margin-top: 10px;
+				margin-left:5px;
+	        }
+	
+	        p {
+	            font-size: 14px;
+				font-weight: lighter;
+				margin-left:10px;
+	        }
+	</style>
+</head>
+<body>
+	<div class="flex-row">
+        <button class="back" onclick="window.location.href='h4.html'">&#9664;</button>
+        <h1>User Handbook</h1>
+	</div>
+
+    <br>
+
+	<h1>Tartalomjegyzék</h1>
+	<p>1. Bevezetés </p>
+	<p>2. Telepítés </p>
+	<p>3. Projektek Kezelése </p>
+	<p>4. Grafikus Felhasználói Interfész </p>
+	<p>4.1. Objektumok létrehozása </p>
+	<p>4.2. Objektumok pozícionálás </p>
+   	<p>4.3. Kamera kezelése</p>
+	<p>4.4 Asset-k használata </p>
+	<p>4.5. Hangok használata </p>
+	<p>5. Scripting </p>
+	<p>6. Market használata </p>
+	
+	<h1>1. Bevezetés</h1>
+	
+	<p>
+		A 3D multi-purpose game engine (motor) egy olyan szoftveres keretrendszer, amely lehetővé teszi a fejlesztők számára, hogy 3D-s játékokat hozzanak létre és kezeljenek.
+         Ezek a motorok számos funkciót biztosítanak, amelyek segítik a játékfejlesztési folyamatot. Néhány ismert 3D multi-purpose game engine közé tartozik az Unreal Engine, Unity, CryEngine és Godot Engine. Ezek a motorok széles körű lehetőségeket biztosítanak a fejlesztőknek, és segítenek létrehozni 3D-s játékokat, csökkentve annak fejlesztési költségeit illetve idejét.
+	</p>
+	
+	<h1>2. Telepítés </h1>
+	
+	<p>
+		A telepítést megelőzőleg ellenőrizzük az internet kapcsolatot, majd működő kapcsolat esetén az adott oldalon található Download/Letöltés felitara kattintva autómatikusan elindul a kliens telepítése.
+        Ezután mminden java nyelvet és OpenGL-t támogató operációs rendszereken futtatható a program, egyedül a LWJGL és Gson könyvtárak hiánya okozhat futtatási hibát.
+	</p>
+	
+	<h1>3. Projektek Kezelése</h1>
+	
+	<p>
+		A menüsor jobb szélén található flopi alakú gombbal lehet gyorsmenteni, ami a CRTL+S billentyűk lenyomásával is elérhető. Projecktek megnyitása, illetve létrehozása a Mentés melletti 3 pontot tartalmazó
+        gombbal lehetséges. A rákattintást követően a megjelenő listában található többek között a 'Mentés másként','Projekt megnyitása' és az 'Új projekt' is.
+    </p>
+	<img src="img/Main.png" alt="Projekt kezelés" width="512px" style="margin-top: 10px; text-align: center">
+
+	<h1>4. Grafikus Felhasználói Interfész</h1>
+
+        <img src="img/Entities.png" alt="GUI" width="512px" style="margin-top: 10px; text-align: center">
+
+        <h2>4.1. Objektumok létrehozása</h2>
+        
+        <p>
+            A képen látható módon az Objektumokat, avagy Entity-ket tartalmazó ablak a bal felső sarokban látható  legszélső gombbal érhető el. Az Entity ablak megjelenése után láthatók a már létező objektumok.
+            Újak hozzáadása pedig a + gombbal történik, a gomb lenyomása után megjelenik egy ablak, amelyikben kilehet választani, hogy a beépített modellek közül akarunk hozzáadni vagy
+            ha egy sajátot, akkor az 'Egyéb'-re kattintva tallózhatjuk a meghajtónkról. A
+        </p>
+
+        <h2>4.2. Objektumok pozícionálás</h2>
+        
+        <p>
+            Egy objektum pozícióját, elforgatását illetve méretét a Properties ablakban érhetjük el. Az ablak megjelenítése a bal fent található csavarkulcs gombbal lehetséges.
+            Az ablak tartalmazza a kiválasztott objektum adatait, amik azok átírásával változtathatók meg.
+        </p>
+
+        <img src="img/Properties.png" alt="Prop" width="512px" style="margin-top: 10px; text-align: center">
+
+        <h2>4.3. Kamera kezelése</h2>
+        
+        <p>
+            A kamera is egy objektumként van kezelve, így annak pozícionálása és mozgatása az objektumokkal megegyező módon történik. Lásd 5.2. alpont.
+        </p>
+        
+        <h2>4.4. Asset-k használata</h2>
+        
+        <p>
+            Az 'Assets' és 'Components' menü ablakok megnyitása a bal felül található gombbal történik. Az Assets ablakban találhatók a projekt által tartalmazott képek, hangok, textúrák és kész modellek is. Itt az Assetek mappákba való csoportosítása megkönnyítheti a fejlesztő számára a munkát.
+            A Components ablakban állíthatók be egyes Entity-k fizikai tulajdonságai, ilyen például a 'Rigidbody' illetve a 'Collider' is.
+        </p>
+
+        <img src="img/Assets.png" alt="AssXD" width="512px" style="margin-top: 10px; text-align: center">
+
+        <h2>4.5. Hangok használata</h2>
+        
+        <p>
+            A Hangok használata a 'Components' ablakban tálálható, amiben a Sound Effects fülben adható hozzá hanghatások. A hang fájlok formátuma MP3, WAV,OGG illetve FLAC lehet.
+        </p>
+        
+    <h1>5. Scripting</h1>
+	
+        <p>
+            A scriptek használata elengedhetetlen része egy Game Engine-nek. Scriptinggel lehet befolyásolni az objektumok dinamikus mozgatását, létrehozását stb.
+            A sctripteket tartalamazó ablak a bal felső gombbal nyitható meg, ezután a szerkezteni kívánt script file fiválasztása után az ablakban csak a script fog megjelenni. A megnyitott script az ablak jobb felső sarkában lévő flop
+            alakú gombbal menthető, míg visszalépni a scriptek listájához az ablak sarkéban található nyíllal lehetséges.
+        </p>-
+        <img src="img/Scripting.png" alt="AssXD" width="512px" style="margin-top: 10px; text-align: center">
+
+	<h1>6. Market használata</h1>
+	
+	<p>
+		A Market ablak a bal menüsor utolsó gombjával nyitható meg. A Market használata csak felhasználó fiókkal lehetséges, a regisztrációhoz az ablak 
+        jobb oldalán látható user iconra kattintva lehetséges illetve a bejelentkezls is itt történik. A középső icon a Marketre feltöltött modellek, projektek stb. letöltése lehetséges.
+        Míg a bal oldali icon a feltöltésre szolgál. A feltöltés során néhány jellemző, valamint egy rövid leírás megadása kötelező.
+	</p>
+    <img src="img/Market.png" alt="AssXD" width="512px" style="margin-top: 10px; text-align: center">
+	<br>
+	<footer>
+	        <p>
+	            #2023, KRTN-Brigád, All rights reserved.
+	        </p>
+	</footer>
+
+</body>
+</html>
