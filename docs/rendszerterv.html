@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="homework.css" />
-	<title>User Manual</title>
+	<title>Rendszerterv</title>
 	<style>
 	        html, body, li {
 	            font-size: 14px;
@@ -36,7 +36,7 @@
 <body>
 	<div class="flex-row">
         <button class="back" onclick="window.location.href='h4.html'">&#9664;</button>
-        <h1>User Handbook</h1>
+        <h1>Rendszerterv</h1>
 	</div>
 
     <br>
@@ -46,26 +46,29 @@
 	<p>2. Telepítés </p>
 	<p>3. Projektek Kezelése </p>
 	<p>4. Grafikus Felhasználói Interfész </p>
-	<p>4.1. Objektumok létrehozása </p>
-	<p>4.2. Objektumok pozícionálás </p>
-   	<p>4.3. Kamera kezelése</p>
-	<p>4.4 Asset-k használata </p>
-	<p>4.5. Hangok használata </p>
-	<p>5. Scripting </p>
-	<p>6. Market használata </p>
+	<p>4.1. Hogyan hozzunk létre elemeket </p>
+	<p>4.2. Kamera és objektum pozícionálás </p>
+    <p>4.3. Kamera és objektum pozícionálás </p>
+	<p>5.1. Objektumok létrehozása és pozícionálása </p>
+	<p>5.2. Kamera kezelése </p>
+	<p>6. Hangok használata </p>
+	<p>7. Market használata </p>
 	
 	<h1>1. Bevezetés</h1>
 	
 	<p>
 		A 3D multi-purpose game engine (motor) egy olyan szoftveres keretrendszer, amely lehetővé teszi a fejlesztők számára, hogy 3D-s játékokat hozzanak létre és kezeljenek.
          Ezek a motorok számos funkciót biztosítanak, amelyek segítik a játékfejlesztési folyamatot. Néhány ismert 3D multi-purpose game engine közé tartozik az Unreal Engine, Unity, CryEngine és Godot Engine. Ezek a motorok széles körű lehetőségeket biztosítanak a fejlesztőknek, és segítenek létrehozni 3D-s játékokat, csökkentve annak fejlesztési költségeit illetve idejét.
+		 A motorok sokoldalúsága révén bárki, legyen az tapasztalt játékfejlesztő vagy újonc, képes olyan projekteket létrehozni, amelyek a saját elképzeléseit és kreativitását tükrözik. A grafikus és hangi elemek kezelése, az animációk létrehozása, a fizika és mesterséges intelligencia implementálása, valamint a cross-platform támogatás mind-mind a fejlesztők rendelkezésére áll.
 	</p>
 	
 	<h1>2. Telepítés </h1>
 	
 	<p>
-		A telepítést megelőzőleg ellenőrizzük az internet kapcsolatot, majd működő kapcsolat esetén az adott oldalon található Download/Letöltés felitara kattintva autómatikusan elindul a kliens telepítése.
-        Ezután mminden java nyelvet és OpenGL-t támogató operációs rendszereken futtatható a program, egyedül a LWJGL és Gson könyvtárak hiánya okozhat futtatási hibát.
+		A telepítést megelőzőleg ellenőrizzük az internet kapcsolatot. Ellenőrizd, hogy a célrendszeren telepítve van-e a Java Runtime Environment (JRE) vagy a Java Development Kit (JDK).
+		Ha nincs telepítve, töltsd le és telepítsd a legfrissebb Java verziót a hivatalos Oracle Java weboldalról vagy használd az OpenJDK-t. Majd az adott oldalon található Download/Letöltés felitara kattintva autómatikusan elindul a kliens telepítése.
+        A letöltött fájl lehet ZIP vagy JAR kiterjesztésű. Amennyiben ZIP, kicsomagolás után a kliensre kattintva futtatható. JAR fájl esetén nyisd meg a parancssor vagy terminál ablakot a célkönyvtárban, majd futtasd a java -jar yourfile.jar parancsot.
+		A game engine java nyelvet és OpenGL-t támogató operációs rendszereken futtatható,  egyedül a LWJGL és Gson könyvtárak hiánya okozhat futtatási hibát.
 	</p>
 	
 	<h1>3. Projektek Kezelése</h1>
@@ -73,6 +76,9 @@
 	<p>
 		A menüsor jobb szélén található flopi alakú gombbal lehet gyorsmenteni, ami a CRTL+S billentyűk lenyomásával is elérhető. Projecktek megnyitása, illetve létrehozása a Mentés melletti 3 pontot tartalmazó
         gombbal lehetséges. A rákattintást követően a megjelenő listában található többek között a 'Mentés másként','Projekt megnyitása' és az 'Új projekt' is.
+		A "Mentés másként" opció azáltal különbözik a hagyományos "Mentés" opciótól, hogy lehetőséget ad a felhasználónak a fájl mentési helyét és nevét megadni. Ez általában a szoftverekben akkor használatos, amikor az alapértelmezett fájlnevet vagy elérési utat szeretnénk módosítani. 
+		Minden játékmotor egyedi projektfájlok és mappastruktúrák használatával rendelkezik. Amikor egy projektet létrehozol egy játékmotorban, a motor automatikusan elkészíti az alapvető fájlokat és könyvtárakat a projektben. 
+		A projekt kiterjesztése általában az egyedi fájlstruktúra vagy a motor sajátos fájlformátumának egyik része.
     </p>
 	<img src="img/Main.png" alt="Projekt kezelés" width="512px" style="margin-top: 10px; text-align: center">
 
@@ -83,9 +89,11 @@
         <h2>4.1. Objektumok létrehozása</h2>
         
         <p>
-            A képen látható módon az Objektumokat, avagy Entity-ket tartalmazó ablak a bal felső sarokban látható  legszélső gombbal érhető el. Az Entity ablak megjelenése után láthatók a már létező objektumok.
+            A játékmotorok gyakran tartalmaznak beépített modelleket, textúrákat és egyéb erőforrásokat, amelyek segíthetnek a fejlesztőknek a prototípusok elkészítésében, a tesztelésben,
+			 vagy akár egy teljes játék létrehozásában, ilyen például a Character Modellek és a Environment Modellek is. A képen látható módon az Objektumokat, avagy Entity-ket tartalmazó ablak a bal felső sarokban látható  legszélső gombbal érhető el. 
+			 Az Entity ablak megjelenése után láthatók a már létező objektumok.
             Újak hozzáadása pedig a + gombbal történik, a gomb lenyomása után megjelenik egy ablak, amelyikben kilehet választani, hogy a beépített modellek közül akarunk hozzáadni vagy
-            ha egy sajátot, akkor az 'Egyéb'-re kattintva tallózhatjuk a meghajtónkról. A
+            ha egy sajátot, akkor az 'Egyéb'-re kattintva tallózhatjuk a meghajtónkról. A program által ismert kiterjesztásek közé tartozik a BLEND, a STl és a 3DS is.
         </p>
 
         <h2>4.2. Objektumok pozícionálás</h2>
@@ -100,8 +108,10 @@
         <h2>4.3. Kamera kezelése</h2>
         
         <p>
-            A kamera is egy objektumként van kezelve, így annak pozícionálása és mozgatása az objektumokkal megegyező módon történik. Lásd 5.2. alpont.
-        </p>
+            A kamera is egy objektumként van kezelve, így annak pozícionálása és mozgatása az objektumokkal megegyező módon történik. 
+			Állítsd be a kamera pozícióját a játék terében. Ez határozza meg, honnan nézi a játékot. Például, ha a játékos szemszögét szeretnéd, a kamera pozíciója legyen azonos a játékos pozíciójával.
+			Ha a játékos mozog, a kamera követését biztosítanod kell. Ezt lehet egyszerűen a kamera pozíciójának frissítésével megoldani, illetve scripteléssel.
+		</p>
         
         <h2>4.4. Asset-k használata</h2>
         
@@ -114,8 +124,10 @@
 
         <h2>4.5. Hangok használata</h2>
         
-        <p>
-            A Hangok használata a 'Components' ablakban tálálható, amiben a Sound Effects fülben adható hozzá hanghatások. A hang fájlok formátuma MP3, WAV,OGG illetve FLAC lehet.
+        <p>    
+		Hanghatások (audio effects) használata egy game engine-ben szintén kulcsfontosságú a játékélmény megteremtésében. 
+		Első lépésként importáld be a hangfájlokat a projektbe, amiket ezután a az Assets ablak találhatsz meg. Ez lehetővé teszi, hogy a játékban ezeket a hangokat használd.
+		A Hanghatások használata a 'Components' ablakban tálálható, amiben a Sound Effects fülben adható hozzá hanghatások. A hang fájlok formátuma MP3, WAV,OGG illetve FLAC lehet.
         </p>
         
     <h1>5. Scripting</h1>
@@ -124,7 +136,7 @@
             A scriptek használata elengedhetetlen része egy Game Engine-nek. Scriptinggel lehet befolyásolni az objektumok dinamikus mozgatását, létrehozását stb.
             A sctripteket tartalamazó ablak a bal felső gombbal nyitható meg, ezután a szerkezteni kívánt script file fiválasztása után az ablakban csak a script fog megjelenni. A megnyitott script az ablak jobb felső sarkában lévő flop
             alakú gombbal menthető, míg visszalépni a scriptek listájához az ablak sarkéban található nyíllal lehetséges.
-        </p>-
+        </p>
         <img src="img/Scripting.png" alt="AssXD" width="512px" style="margin-top: 10px; text-align: center">
 
 	<h1>6. Market használata</h1>
