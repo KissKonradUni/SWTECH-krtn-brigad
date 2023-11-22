@@ -51,8 +51,9 @@
     <p>4.3. Kamera és objektum pozícionálás </p>
 	<p>5.1. Objektumok létrehozása és pozícionálása </p>
 	<p>5.2. Kamera kezelése </p>
-	<p>6. Hangok használata </p>
-	<p>7. Market használata </p>
+	<p>6. Market használata </p>
+	<p>7. Adatmodellek</p>
+	<p>8. Funkcionális modell</p>
 	
 	<h1>1. Bevezetés</h1>
 	
@@ -153,6 +154,40 @@
 	            #2023, KRTN-Brigád, All rights reserved.
 	        </p>
 	</footer>
+
+	<h1>7. Adatmodellek</h1>
+
+	<p>
+		A motor a teljes projektet egyetlen fájlba menti, amelynek kiterjesztése .json. A fájlban található adatokat a Gson könyvtár segítségével olvassa és írja. A fájlban található adatokat a következőképpen lehet felosztani:
+	</p>
+	<ul>
+		<li>Kollekció mutatók, amely más, hasonló módon elkészült json fájlokra mutatnak, ezzel segítve a moduláris felépítést</li>
+		<li>Az entitások, azok komponensei és azok tulajdonságai, a komponensek által felhasznált/betöltött erőforrások</li>
+		<li>A projekthez tartozó erőforrások, mint például a modellek, textúrák, hangok, scriptek útvonalai</li>
+		<li>Az egyéb beállítások, mint például a háttér színe, a fizikai motor beállításai</li>
+		<li>A logikai rendszerek beállításai</li>
+		<li>A kezelőfelület beállításai</li>
+	</ul>
+
+	<h1>8. Funkcionális modell</h1>
+
+	<p>
+		A funkcionalitásában a projekt mindössze pár lépésben fogja kezelni a fájlokat:
+	</p>
+		<ul>
+		<li>A projekt létrehozásakor a motor létrehozza a projekt fájlját, amelyben a projekt adatai lesznek tárolva</li>
+		<li>A projekt fájljában található adatok alapján a motor létrehozza a projekt mappáját, amelyben a projekt erőforrásai lesznek tárolva</li>
+		<li>A motor létrehozza a projektben található entitásokat, azok komponenseit és azok tulajdonságait</li>
+		<li>A motor betölti a projektben található erőforrásokat, mint például a modellek, textúrák, hangok, scriptek</li>
+		<li>A motor beállítja a háttér színét, a fizikai motor beállításait, a logikai rendszerek beállításait és a kezelőfelület beállításait</li>
+		<li>A motor megjeleníti a kezelőfelületet</li>
+		<li>A motor elindítja a logikai rendszereket</li>
+		<li>A motor elindítja a fizikai rendszereket</li>
+		</ul>
+
+	<p>
+		...és a projekt betöltése befejeződött.
+	</p>
 
 </body>
 </html>
