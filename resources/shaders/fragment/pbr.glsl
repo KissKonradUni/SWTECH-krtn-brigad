@@ -111,5 +111,6 @@ void main() {
 
     col += f_PBRData.emission;
 
-    color = vec4(col, 1.0);
+    float alpha = f_albedo.a;
+    color = vec4(col, alpha);
 }

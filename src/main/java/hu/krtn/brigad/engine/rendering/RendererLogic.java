@@ -34,6 +34,13 @@ public class RendererLogic extends Logic {
             StaticModelRendererComponent staticModelRendererComponent = (StaticModelRendererComponent) entity.getComponent(StaticModelRendererComponent.class);
             if (staticModelRendererComponent == null) continue;
 
+            if (staticModelRendererComponent.isAlphaBlending()) {
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+            } else {
+                glDisable(GL_BLEND);
+            }
+
             staticModelRendererComponent.bind();
             staticModelRendererComponent.setLights(LightsLogic.getLightsCache());
 

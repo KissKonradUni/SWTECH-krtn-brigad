@@ -33,6 +33,8 @@ public class StaticModelRendererComponent extends Component {
     private String vertexShaderPath;
     private String fragmentShaderPath;
 
+    private boolean alphaBlending = false;
+
     /**
      * The constructor of the renderer component.
      * @param mesh The mesh to be rendered.
@@ -65,6 +67,15 @@ public class StaticModelRendererComponent extends Component {
 
     public StaticModelRendererComponent() {
         this(null, null, null, null);
+    }
+
+    public StaticModelRendererComponent setAlphaBlending(boolean alphaBlending) {
+        this.alphaBlending = alphaBlending;
+        return this;
+    }
+
+    public boolean isAlphaBlending() {
+        return alphaBlending;
     }
 
     @Override

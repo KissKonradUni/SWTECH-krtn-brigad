@@ -155,7 +155,7 @@ public class TransformComponent extends Component {
 
     /**
      * Returns the model matrix of the entity.
-     * The model matrix is used to transform the vertices of the entity regarding to it's position, rotation and scale.
+     * The model matrix is used to transform the vertices of the entity regarding its position, rotation and scale.
      * @return The model matrix.
      */
     public Matrix4f getModelMatrix() {
