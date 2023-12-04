@@ -33,15 +33,8 @@ public class LogicManager {
      * @param fixedDeltaTime The time elapsed since the last update.
      */
     public void update(float fixedDeltaTime) {
-        Logic lastLogic = null;
-        try {
-            for (Logic logic : logics) {
-                lastLogic = logic;
-                logic.CallUpdate(fixedDeltaTime);
-            }
-        } catch (Exception e) {
-            Logger.error("Iteratable object changed during iteration!");
-            Logger.error("Last logic: " + lastLogic.getClass().getName());
+        for (Logic logic : logics) {
+            logic.CallUpdate(fixedDeltaTime);
         }
         EntityManager.getInstance().setDirty(false);
     }

@@ -32,22 +32,10 @@ public class TetrahedronProject {
     };
 
     public static void main(String[] args) {
-        Window window = Window.initInstance(1920, 1080, "Test Game", 5.0f, true, false, 4);
+        Window window = Window.initInstance(1920, 1080, "Test Game", 800.0f, true, false, 4);
         window.init();
 
         ResourceManager.StaticModelData[] tetrahedron = ResourceManager.getInstance().loadStaticModel("./resources/models/extra/tetrahedron.gltf");
-
-        EntityFactory
-                .create("Camera")
-                .addComponent(new TransformComponent(new Vector3f(4.0f, 0.0f, 4.0f), new Vector3f(0.0f, 45.0f, 0.0f), new Vector3f(1.0f)))
-                .addComponent(new CameraComponent(50.0f, 0.1f, 1000.0f))
-                .buildAndRegister();
-
-        EntityFactory
-                .create("Light")
-                .addComponent(new TransformComponent(new Vector3f(2.0f, 3.0f, 3.0f), new Vector3f(0.0f), new Vector3f(1.0f)))
-                .addComponent(new LightComponent(LightComponent.LightType.POINT, 100.0f, new Vector3f(1.0f, 1.0f, 1.0f)))
-                .buildAndRegister();
 
         EntityFactory
                 .create("HitMarker")
@@ -94,6 +82,23 @@ public class TetrahedronProject {
                 .buildAndRegister();
 
         EntityFactory
+                .create("Piggyback")
+                .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f), new Vector3f(1.0f), EntityManager.getInstance().getEntitiesByName("Tetrahedron")[0]))
+                .buildAndRegister();
+
+        EntityFactory
+                .create("Light")
+                .addComponent(new TransformComponent(new Vector3f(2.0f, 3.0f, 3.0f), new Vector3f(0.0f), new Vector3f(1.0f), EntityManager.getInstance().getEntitiesByName("Piggyback")[0]))
+                .addComponent(new LightComponent(LightComponent.LightType.POINT, 100.0f, new Vector3f(1.0f, 1.0f, 1.0f)))
+                .buildAndRegister();
+
+        EntityFactory
+                .create("Camera")
+                .addComponent(new TransformComponent(new Vector3f(4.0f, 0.0f, 4.0f), new Vector3f(0.0f, 45.0f, 0.0f), new Vector3f(1.0f), EntityManager.getInstance().getEntitiesByName("Piggyback")[0]))
+                .addComponent(new CameraComponent(50.0f, 0.1f, 1000.0f))
+                .buildAndRegister();
+
+        EntityFactory
                 .create("Cube")
                 .addComponent(new TransformComponent(new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(0.0f), new Vector3f(1.0f)))
                 .addComponent(
@@ -136,78 +141,66 @@ public class TetrahedronProject {
                 zStep *= 10;
 
                 transformComponent.setRotation(new Vector3f(xStep, yStep, zStep));
-                window.setTitle("x: " + xStep + " y: " + yStep + " z: " + zStep);
 
-                // find the closest side of the cube to a tetrahedron vertex
-                // and scale the cube to that size
-                float minDistance = Float.MAX_VALUE;
-                Vector3f hitMarkerPosition = new Vector3f();
-                int closestSideIndex = 0;
-
-                for (int i = 0; i < 6; i++) {
-                    // find the center of the side
-                    Vector3f sideCenter = switch (i) {
-                        case 0 -> new Vector3f( 0.0f,  0.0f,  1.0f);
-                        case 1 -> new Vector3f( 0.0f,  0.0f, -1.0f);
-                        case 2 -> new Vector3f( 0.0f,  1.0f,  0.0f);
-                        case 3 -> new Vector3f( 0.0f, -1.0f,  0.0f);
-                        case 4 -> new Vector3f( 1.0f,  0.0f,  0.0f);
-                        case 5 -> new Vector3f(-1.0f,  0.0f,  0.0f);
+                Vector3f closestVertexPosition = new Vector3f();
+                Vector3f closestSideHitMarkerPosition = new Vector3f();
+                float closestSideHitMarkerDistance = Float.MAX_VALUE;
+                for (int cubeSide = 0; cubeSide < 6; cubeSide++ ) {
+                    Vector3f sideLocalPos = switch (cubeSide) {
+                        case 0 -> new Vector3f(1.0f, 0.0f, 0.0f);
+                        case 1 -> new Vector3f(-1.0f, 0.0f, 0.0f);
+                        case 2 -> new Vector3f(0.0f, 1.0f, 0.0f);
+                        case 3 -> new Vector3f(0.0f, -1.0f, 0.0f);
+                        case 4 -> new Vector3f(0.0f, 0.0f, 1.0f);
+                        case 5 -> new Vector3f(0.0f, 0.0f, -1.0f);
                         default -> new Vector3f();
                     };
-                    sideCenter.rotate(new Quaternionf().fromAxisAngleDeg(1.0f, 0.0f, 0.0f, xStep));
-                    sideCenter.rotate(new Quaternionf().fromAxisAngleDeg(0.0f, 1.0f, 0.0f, yStep));
-                    sideCenter.rotate(new Quaternionf().fromAxisAngleDeg(0.0f, 0.0f, 1.0f, zStep));
+                    Matrix3f rotationMatrix = new Matrix3f().identity();
+                    rotationMatrix.rotateXYZ((float) Math.toRadians(xStep), (float) Math.toRadians(yStep), (float) Math.toRadians(zStep));
+                    Vector3f sideWorldPos = rotationMatrix.transform(sideLocalPos);
 
-                    // find the closest vertex of the tetrahedron to the side
-                    for (Vector3f tetrahedronVertex : TetrahedronProject.tetrahedronVertices) {
-                        float distanceToSide = sideCenter.distance(tetrahedronVertex);
-                        if (distanceToSide < minDistance) {
-                            minDistance = distanceToSide;
+                    // intersect every tetrahedron vertex with the cube side
+                    for (int tetrahedronVertex = 0; tetrahedronVertex < 4; tetrahedronVertex++) {
+                        Vector3f directionVector = tetrahedronVertices[tetrahedronVertex].normalize();
+                        Vector3f origin = new Vector3f(0.0f);
 
-                            // hit marker position
-                            hitMarkerPosition = new Vector3f(tetrahedronVertex);
+                        // DON'T ROTATE THE DIRECTION VECTOR
+                        // check for intersection between the ray and the plane
+                        float denominator = directionVector.dot(sideWorldPos);
+                        if (denominator == 0) continue;
 
-                            // closest side index
-                            closestSideIndex = i;
+                        float t = (sideWorldPos.dot(origin) + 1) / denominator;
+                        if (t < 0) continue;
+
+                        Vector3f hitMarkerPosition = new Vector3f(directionVector).mul(t);
+                        hitMarkerPosition.add(origin);
+
+                        Vector3f distanceFromVertexToHitMarker = new Vector3f(hitMarkerPosition).sub(tetrahedronVertices[tetrahedronVertex]);
+                        float distanceFromVertexToHitMarkerLength = distanceFromVertexToHitMarker.length();
+
+                        if (distanceFromVertexToHitMarkerLength < closestSideHitMarkerDistance) {
+                            closestSideHitMarkerDistance = distanceFromVertexToHitMarkerLength;
+                            closestSideHitMarkerPosition = hitMarkerPosition;
+                            closestVertexPosition = tetrahedronVertices[tetrahedronVertex];
                         }
                     }
                 }
 
-                // scale the cube to the closest side
-                // transformComponent.setScale(new Vector3f(hitMarkerPosition.length()));
+                // scale the hit marker
+                Vector3f fromVertexToHitMarker = new Vector3f(closestSideHitMarkerPosition).sub(closestVertexPosition);
+                float distanceFromVertexToHitMarker = fromVertexToHitMarker.length();
+                float vertexPosLength = closestVertexPosition.length();
+                float scale = (distanceFromVertexToHitMarker + vertexPosLength) / vertexPosLength;
 
-                // this was incorrect, we need to transform into the cube's space,
-                // then scale, then transform back and measure the distance
-                // to the center of the cube
-                Matrix3f cubeTransformMatrix = new Matrix3f().identity();
-                cubeTransformMatrix.rotate(new Quaternionf().fromAxisAngleDeg(1.0f, 0.0f, 0.0f, xStep));
-                cubeTransformMatrix.rotate(new Quaternionf().fromAxisAngleDeg(0.0f, 1.0f, 0.0f, yStep));
-                cubeTransformMatrix.rotate(new Quaternionf().fromAxisAngleDeg(0.0f, 0.0f, 1.0f, zStep));
-
-                Vector3f hitMarkerPosition3f = new Vector3f(hitMarkerPosition).mul(cubeTransformMatrix);
-
-                // this only works upwards,
-                // we need to select the closest side's axis
-                // float scale = Math.abs(hitMarkerPosition4f.y);
-
-                // this works
-                float scale = Math.abs(switch (closestSideIndex) {
-                    case 0, 1 -> hitMarkerPosition3f.z;
-                    case 2, 3 -> hitMarkerPosition3f.y;
-                    case 4, 5 -> hitMarkerPosition3f.x;
-                    default -> 0.0f;
-                });
-
-                // scale the cube to the closest side
                 transformComponent.setScale(new Vector3f(scale));
 
                 // move the hit marker to the closest vertex
-                hitMarkerTransformComponent.setPosition(hitMarkerPosition);
+                hitMarkerTransformComponent.setPosition(closestVertexPosition);
 
+                window.setTitle("x: " + xStep + " y: " + yStep + " z: " + zStep + " scale: " + scale);
                 currentStep += 1;
 
-                recordedSteps.add(new recordedStep(new Vector3f(transformComponent.getRotation()), hitMarkerPosition.length()));
+                recordedSteps.add(new recordedStep(new Vector3f(transformComponent.getRotation()), scale));
 
                 if (currentStep == 9 * 18 * 36) {
                     Logger.log("Finished recording steps");
@@ -232,6 +225,19 @@ public class TetrahedronProject {
             @Override
             protected void render(Entity[] queryTargets, float deltaTime) {
 
+            }
+        });
+
+        LogicManager.getInstance().registerLogic(new Logic(new Query("Piggyback")) {
+            @Override
+            protected void update(Entity[] queryTargets, float fixedDeltaTime) {
+
+            }
+
+            @Override
+            protected void render(Entity[] queryTargets, float deltaTime) {
+                TransformComponent transformComponent = (TransformComponent) queryTargets[0].getComponent(TransformComponent.class);
+                transformComponent.setRotation(new Vector3f(0.0f, transformComponent.getRotation().y + 30.0f * deltaTime, 0.0f));
             }
         });
 
