@@ -1,6 +1,11 @@
 package hu.krtn.brigad.engine.window;
 
 import hu.krtn.brigad.engine.logic.LogicManager;
+import imgui.ImGui;
+import imgui.flag.ImGuiConfigFlags;
+import imgui.gl3.ImGuiImplGl3;
+import imgui.glfw.ImGuiImplGlfw;
+import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -131,6 +136,18 @@ public class Window {
     private boolean fullscreen;
     private int msaa;
 
+    // TODO: Move this to a separate class
+    private float deltaTime;
+    private float time;
+
+    /**
+     *  IMGUI
+     *  */
+    private final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
+    private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+
+    private String glslVersion = null;
+
     /**
      * Creates a new window with the given width, height and title.
      * @param width The width of the window.
@@ -211,6 +228,11 @@ public class Window {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_SAMPLES, msaa);
 
+        glslVersion = "#version 410 core";
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+
         // Create the window
         // Set the window to fullscreen if needed
         windowHandle = glfwCreateWindow(width, height, title, fullscreen ? glfwGetPrimaryMonitor() : 0, 0);
@@ -256,6 +278,23 @@ public class Window {
         GL.createCapabilities();
         Logger.log("OpenGL version: " + glGetString(GL_VERSION));
         Logger.log("OpenGL context created.");
+
+        initImGui();
+    }
+
+    private void initImGui() {
+        Logger.log("Initializing ImGui");
+
+        ImGui.createContext();
+        //ImGui.getIO().addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
+
+        imGuiGlfw.init(windowHandle, true);
+        imGuiGl3.init(glslVersion);
+
+        float scale = (float) width / 1280;
+        ImGui.getIO().setFontGlobalScale(scale);
+
+        Logger.log("ImGui initialized");
     }
 
     /**
@@ -267,7 +306,7 @@ public class Window {
 
         float lastFrameTime    = 0.0f;
         float currentFrameTime = 0.0f;
-        float deltaTime        = 0.0f;
+              deltaTime        = 0.0f;
 
         // enable depth testing
         glEnable(GL_DEPTH_TEST);
@@ -280,28 +319,49 @@ public class Window {
             // Clear the color and depth buffers
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            imGuiGlfw.newFrame();
+            ImGui.newFrame();
+
             // Render the game
             LogicManager.getInstance().render(deltaTime);
+
+            ImGuiLayer.getInstance().render();
+
+            ImGui.render();
+            imGuiGl3.renderDrawData(ImGui.getDrawData());
+
+            endFrame(deltaTime);
 
             // Calculate the time between the last two frames
             currentFrameTime = (float) glfwGetTime();
             deltaTime = currentFrameTime - lastFrameTime;
             lastFrameTime = currentFrameTime;
 
+            time += deltaTime;
+
             // Set the window title
-            glfwSetWindowTitle(
-                    windowHandle,
-                    title +
-                        " | FPS: " + String.format(Locale.ENGLISH, "%06.2f", 1.0f / deltaTime) +
-                        " | UPS: " + String.format(Locale.ENGLISH, "%04.1f", 1.0f / logicThread.getDeltaTime()) +
-                        "/" + logicThread.getTickRate()
-            );
+            //glfwSetWindowTitle(
+            //        windowHandle,
+            //        title +
+            //            " | FPS: " + String.format(Locale.ENGLISH, "%06.2f", 1.0f / deltaTime) +
+            //            " | UPS: " + String.format(Locale.ENGLISH, "%04.1f", 1.0f / logicThread.getDeltaTime()) +
+            //            "/" + logicThread.getTickRate()
+            //);
 
             // Swap the front and back buffers
             glfwSwapBuffers(windowHandle);
 
             // Poll for window events
             glfwPollEvents();
+        }
+    }
+
+    private void endFrame(float deltaTime) {
+        if (ImGui.getIO().hasConfigFlags(ImGuiConfigFlags.ViewportsEnable)) {
+            final long backupWindow = glfwGetCurrentContext();
+            ImGui.updatePlatformWindows();
+            ImGui.renderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backupWindow);
         }
     }
 
@@ -326,4 +386,36 @@ public class Window {
         return (float) width / height;
     }
 
+    public void destroy() {
+        imGuiGl3.dispose();
+        imGuiGlfw.dispose();
+        ImGui.destroyContext();
+        Callbacks.glfwFreeCallbacks(windowHandle);
+        glfwDestroyWindow(windowHandle);
+        glfwTerminate();
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public float getDeltaTime() {
+        return deltaTime;
+    }
+
+    public float getTime() {
+        return time;
+    }
+
+    public float getFixedDeltaTime() {
+        return logicThread.getDeltaTime();
+    }
+
+    public float getTickRate() {
+        return logicThread.getTickRate();
+    }
 }

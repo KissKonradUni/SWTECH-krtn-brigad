@@ -195,14 +195,12 @@ public class ResourceManager {
         // TODO: complete rework
         AIColor4D color = AIColor4D.create();
 
-        /*
         AIString path = AIString.calloc();
-        Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_DIFFUSE, 0, path, (IntBuffer) null, null, null, null, null, null);
+        Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_BASE_COLOR, 0, path, (IntBuffer) null, null, null, null, null, null);
         String texturePath = path.dataString();
         if (!texturePath.isEmpty()) {
             Texture texture = loadTexture(texturePath);
         }
-        */
 
         Vector4f baseColor = new Vector4f(1.0f);
         if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_BASE_COLOR, Assimp.aiTextureType_NONE, 0, color) == 0) {

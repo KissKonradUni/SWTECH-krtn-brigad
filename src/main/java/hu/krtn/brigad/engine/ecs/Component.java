@@ -1,5 +1,6 @@
 package hu.krtn.brigad.engine.ecs;
 
+import hu.krtn.brigad.editor.ExposedFields;
 import hu.krtn.brigad.engine.serialization.Serializable;
 
 /**
@@ -21,5 +22,31 @@ public abstract class Component extends Serializable {
      * @throws ComponentDependencyException If a dependency is missing.
      */
     public void fulfillDependencies(Entity entity) throws ComponentDependencyException {}
+
+    /**
+     * This method returns the simple name of the component's class.
+     * @return The simple name of the component's class.
+     */
+    public String getSimpleName() {
+        return getClass().getSimpleName();
+    }
+
+    /**
+     * This variable stores the fields that are exposed to the editor.
+     */
+    protected final ExposedFields exposedFields = new ExposedFields();
+
+    /**
+     * This method is used to determine which fields should be exposed to the editor.
+     */
+    public abstract void initExposedFields();
+
+    /**
+     * This method is used to get the fields that are exposed to the editor.
+     * @return The fields that are exposed to the editor.
+     */
+    public ExposedFields getExposedFields() {
+        return exposedFields;
+    }
 
 }

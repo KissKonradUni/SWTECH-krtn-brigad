@@ -141,4 +141,8 @@ public class EntityManager {
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
     }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
 }

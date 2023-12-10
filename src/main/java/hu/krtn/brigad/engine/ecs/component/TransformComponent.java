@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import hu.krtn.brigad.editor.ExposedFields;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.EntityManager;
@@ -169,4 +170,21 @@ public class TransformComponent extends Component {
         return parent != null ? parent.getModelMatrix().mul(modelMatrix) : modelMatrix;
     }
 
+    private String getParentUniqueId() {
+        String result;
+        if (parentEntity == null) {
+            result = "null";
+        } else {
+            result = parentEntity.getName() + "#" + parentEntity.getHashId();
+        }
+        return result;
+    }
+
+    @Override
+    public void initExposedFields() {
+        exposedFields.addField("Parent", new ExposedFields.StringField(null, this::getParentUniqueId));
+        exposedFields.addField("Position", new ExposedFields.Vector3fField(this::setPosition, this::getPosition));
+        exposedFields.addField("Rotation", new ExposedFields.Vector3fField(this::setRotation, this::getRotation));
+        exposedFields.addField("Scale", new ExposedFields.Vector3fField(this::setScale, this::getScale));
+    }
 }

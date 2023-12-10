@@ -3,11 +3,13 @@ package hu.krtn.brigad.engine.ecs.component;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import hu.krtn.brigad.editor.ExposedFields;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
-import hu.krtn.brigad.engine.ecs.EntityManager;
 import org.joml.Vector3f;
+
+import java.util.Arrays;
 
 public class LightComponent extends Component {
 
@@ -15,6 +17,16 @@ public class LightComponent extends Component {
         DIRECTIONAL,
         SPOT,
         POINT;
+
+        private static String[] sv = null;
+        private static String[] stringValues() {
+            return Arrays.stream(values()).map(Enum::toString).toArray(String[]::new);
+        }
+        public static String[] getStringValues() {
+            if (sv == null)
+                sv = stringValues();
+            return sv;
+        }
 
         @Override
         public String toString() {
@@ -109,6 +121,15 @@ public class LightComponent extends Component {
     @Override
     public void fulfillDependencies(Entity entity) throws ComponentDependencyException {
         transformComponent = (TransformComponent) entity.getComponent(TransformComponent.class);
+    }
+
+    @Override
+    public void initExposedFields() {
+        exposedFields.addField("lightType", new ExposedFields.EnumField((i) -> {
+            setLightType(LightType.values()[i]);
+        }, () -> getLightType().ordinal(), LightType.stringValues()));
+        exposedFields.addField("intensity", new ExposedFields.FloatField(this::setIntensity, this::getIntensity));
+        exposedFields.addField("color", new ExposedFields.ColorField(this::setColor, this::getColor));
     }
 
 }

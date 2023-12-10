@@ -2,6 +2,7 @@ package hu.krtn.brigad.engine.ecs.component;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import hu.krtn.brigad.editor.ExposedFields;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
@@ -155,6 +156,14 @@ public class CameraComponent extends Component {
         if (transformComponent == null) {
             throw new ComponentDependencyException(TransformComponent.class);
         }
+    }
+
+    @Override
+    public void initExposedFields() {
+        exposedFields.addField("fieldOfView", new ExposedFields.FloatField(this::setFieldOfView, this::getFieldOfView));
+        exposedFields.addField("nearPlane",   new ExposedFields.FloatField(this::setNearPlane, this::getNearPlane));
+        exposedFields.addField("farPlane",    new ExposedFields.FloatField(this::setFarPlane, this::getFarPlane));
+        exposedFields.addField("active",      new ExposedFields.BooleanField((value) -> activeCamera = value ? this : activeCamera, () -> activeCamera == this));
     }
 
     /**
