@@ -1,0 +1,13 @@
+- Felhasználói dokumentáció kevés (Balázs)
+- Use Case diagram programozási felhasználásokhoz (Geri és Kola)
+	- Nyersanyag betöltés: Programozó -> Kell xy fájl típus -> ResourceManager -> Megfelelő betöltés function -> használat
+	- Játéklogika hozzáadása: Programozó -> Megfelelő entitások kiválasztása -> Logika megírása -> Tesztelés
+	- stb.
+- Osztálydiagram Pseudo-bővítése hogy teljes legyen (Konrád)
+	- Input
+	- UI
+	- Fizika
+	- Optimalizálási osztályok
+	- Editor
+- Dinamikus modell (Valaki, valszeg Konrád)
+- Alrendszerekre bontás (Konrád)

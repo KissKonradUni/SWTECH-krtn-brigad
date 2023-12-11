@@ -1,3 +1,28 @@
+////KRTN
+
+// ;; This version is the KRTN marker's version.
+////VERSION 1.0
+
+// ;; (url) TODO: add documentation link for possible texture names
+////TEXTURES START
+//baseColor 2
+//aoMetallicRoughness 2
+//emission 2
+////TEXTURES END
+
+// ;; (url) TODO: add documentation link for usage
+// ;; No extra uniforms are required for this shader, so we should comment this out.
+//;;////UNIFORMS START
+//;;float exampleUniform;
+//;;float f_time;
+//;;etc...
+//;;////UNIFORMS END
+
+////LIGHTS enabled
+////MAX_LIGHTS 8
+
+////END
+
 #version 410 core
 
 struct vertex_data {
@@ -9,13 +34,6 @@ struct vertex_data {
 };
 in vertex_data f_PBRInfo;
 
-//struct pbr_data {
-//    float metallic;
-//    float roughness;
-//    float ambientOcclusion;
-//    float emission;
-//};
-//uniform pbr_data f_PBRData;
 uniform sampler2D baseColor;
 uniform sampler2D aoMetallicRoughness;
 uniform sampler2D emission;

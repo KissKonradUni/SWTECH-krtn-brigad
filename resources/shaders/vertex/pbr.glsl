@@ -1,3 +1,18 @@
+////KRTN
+
+// ;; This version is the KRTN marker's version.
+////VERSION 1.0
+
+// ;; (url) TODO: add documentation link for usage
+////UNIFORMS START
+//mat4 model
+//mat4 projection
+//mat4 view
+//vec3 viewPos
+////UNIFORMS END
+
+////END
+
 #version 410 core
 
 layout (location = 0) in vec3 position;
@@ -14,12 +29,12 @@ struct vertex_data {
 out vertex_data f_PBRInfo;
 
 uniform mat4 model;
-uniform mat4 proj;
+uniform mat4 projection;
 uniform mat4 view;
 uniform vec3 viewPos;
 
 void main() {
-    gl_Position = proj * view * model * vec4(position, 1.0);
+    gl_Position = projection * view * model * vec4(position, 1.0);
 
     f_PBRInfo.position = vec3(model * vec4(position, 1.0));
     f_PBRInfo.texCoord = uv;

@@ -1,6 +1,7 @@
 package hu.krtn.brigad.engine.resources;
 
 import hu.krtn.brigad.engine.rendering.*;
+import hu.krtn.brigad.engine.rendering.shading.Shader;
 import hu.krtn.brigad.engine.window.Logger;
 import org.joml.Vector4f;
 import org.lwjgl.assimp.*;
@@ -155,7 +156,7 @@ public class ResourceManager {
             Material[] materials = new Material[materialCount];
             for (int i = 0; i < materialCount; i++) {
                 try (AIMaterial material = AIMaterial.create(scene.mMaterials().get(i))) {
-                    materials[i] = processMaterial(material);
+                    materials[i] = processMaterial(material, absolutePath);
                 } catch (NullPointerException e) {
                     Logger.error("Error loading material: " + path);
                     return null;
@@ -188,19 +189,23 @@ public class ResourceManager {
 
     /**
      * Processes a material that was loaded from a model.
-     * @param material The loaded material.
+     *
+     * @param material     The loaded material.
+     * @param absolutePath The absolute path of the model.
      * @return The processed material.
      */
-    private Material processMaterial(AIMaterial material) {
+    private Material processMaterial(AIMaterial material, String absolutePath) {
         // TODO: complete rework
         AIColor4D color = AIColor4D.create();
 
-        AIString path = AIString.calloc();
-        Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_BASE_COLOR, 0, path, (IntBuffer) null, null, null, null, null, null);
-        String texturePath = path.dataString();
-        if (!texturePath.isEmpty()) {
-            Texture texture = loadTexture(texturePath);
-        }
+        // AIString path = AIString.calloc();
+        // Assimp.aiGetMaterialTexture(material, Assimp.aiTextureType_BASE_COLOR, 0, path, (IntBuffer) null, null, null, null, null, null);
+        // String texturePath = path.dataString();
+        // if (!texturePath.isEmpty()) {
+        //     Path parentPath = new File(absolutePath).getParentFile().toPath();
+        //     texturePath = parentPath.resolve(texturePath).toString();
+        //     Texture texture = loadTexture(texturePath);
+        // }
 
         Vector4f baseColor = new Vector4f(1.0f);
         if (Assimp.aiGetMaterialColor(material, Assimp.AI_MATKEY_BASE_COLOR, Assimp.aiTextureType_NONE, 0, color) == 0) {

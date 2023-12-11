@@ -1,8 +1,10 @@
-package hu.krtn.brigad.engine.rendering;
+package hu.krtn.brigad.engine.rendering.shading;
 
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.ecs.component.CameraComponent;
 import hu.krtn.brigad.engine.ecs.component.LightComponent;
+import hu.krtn.brigad.engine.rendering.Material;
+import hu.krtn.brigad.engine.rendering.Mesh;
 import hu.krtn.brigad.engine.resources.ResourceManager;
 import hu.krtn.brigad.engine.window.Logger;
 import org.joml.Matrix4f;
@@ -152,7 +154,7 @@ public class Shader {
             glUniformMatrix4fv(getUniformLocation("model"), false, modelMatrixSupplier.get().get(new float[16]));
         CameraComponent camera = CameraComponent.getActiveCamera();
         if (camera != null) {
-            glUniformMatrix4fv(getUniformLocation("proj"), false, camera.getProjectionMatrix().get(new float[16]));
+            glUniformMatrix4fv(getUniformLocation("projection"), false, camera.getProjectionMatrix().get(new float[16]));
             glUniformMatrix4fv(getUniformLocation("view"), false, camera.getViewMatrix().get(new float[16]));
 
             int viewPosLoc = getUniformLocation("viewPos");

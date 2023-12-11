@@ -3,12 +3,12 @@ package hu.krtn.brigad.engine.ecs.component;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import hu.krtn.brigad.editor.ExposedFields;
 import hu.krtn.brigad.engine.ecs.Component;
 import hu.krtn.brigad.engine.ecs.ComponentDependencyException;
 import hu.krtn.brigad.engine.ecs.Entity;
 import hu.krtn.brigad.engine.logic.LogicManager;
 import hu.krtn.brigad.engine.rendering.*;
+import hu.krtn.brigad.engine.rendering.shading.Shader;
 import hu.krtn.brigad.engine.resources.ResourceManager;
 import org.joml.Vector4f;
 

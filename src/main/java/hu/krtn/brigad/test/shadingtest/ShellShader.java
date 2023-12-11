@@ -1,7 +1,7 @@
 package hu.krtn.brigad.test.shadingtest;
 
 import hu.krtn.brigad.engine.rendering.Material;
-import hu.krtn.brigad.engine.rendering.Shader;
+import hu.krtn.brigad.engine.rendering.shading.Shader;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL33;
 
