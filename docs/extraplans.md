@@ -4,14 +4,10 @@
 A KRTN-Brigád játékmotorja egy közepes komplexitású, Java nyelven készülő, LWJGL-t alkalmazó, Entity-Component System-re alapuló játékmotor. Ez a dokumentum azért felelős, hogy a megfelelő
 diagramokkal szemléltesse az egyes részelemek funkcionalitásait.
 
-# Use-Case diagramok
-> Use-Case diagrams
+# Use-Case diagram
+> Use-Case diagram
 
-## Nyersanyag betöltés
-> Resource loading
-
-## Játéklogika hozzáadása
-> Adding game logic
+![New Use Case]{scale-img}(./img/new_use_case.png)
 
 # Osztálydiagram Pseudó-bővítése
 > Pseudo-extension of class diagram
@@ -437,3 +433,9 @@ Az alrendszerekre bontás a következőképpen fog történni:
 - Editor (szerkesztő)
 
 Az alább felsorolt alrendszerek mindegyike egy külön csomagban lesz elhelyezve. Az Engine csomag a fő csomag, amelyben használatra kerülnek a többi csomagban található osztályok.
+
+# Skeleton implementáció
+> Skeleton implementation
+
+A skeleton implementáció a következő linken érhető el:
+[Skeleton implementáció](https://github.com/KissKonradUni/SWTECH-krtn-brigad/tree/main/src/main/java/hu/krtn/brigad)
