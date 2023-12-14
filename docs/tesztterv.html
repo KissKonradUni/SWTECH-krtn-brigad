@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="homework.css" />
+	<title>Teszteterv</title>
+	<style>
+	        html, body, li {
+	            font-size: 14px;
+	        }
+	
+	        h1 {
+	            font-size: 16pt;
+				margin-bottom: 7px;
+				margin-top: 20px;
+	        }
+	
+	        h2 {
+	            font-family: "Arial", sans-serif;
+	            font-size: 16pt;
+	            font-weight: bold;	
+	            margin-bottom: 15px;
+				margin-top: 10px;
+				margin-left:5px;
+	        }
+	
+	        p {
+	            font-size: 14px;
+				font-weight: lighter;
+				margin-left:10px;
+	        }
+	</style>
+</head>
+<body>
+	<div class="flex-row">
+        <button class="back" onclick="window.location.href='h5.html'">&#9664;</button>
+        <h1>Tesztelési terv</h1>
+	</div>
+
+    <br>
+
+	<h1>Tartalomjegyzék</h1>
+	<p>1. Bevezetés</p>
+	<p>2. A tesztelés jelentősége</p>
+	<p>3. Kezdeti időszak</p>
+	<p>4. Általános szoftvertesztelési szempontok </p>
+	<p>4.1. Funkcionális követelmények tesztelése </p>
+	<p>4.2. Nem funkcionális követelmények tesztelése </p>
+    <p>4.3. Karbantartás</p>
+	<p>5. A tesztelés menete</p>
+	<p>5.1. Tesztterv és Tesztesetek Készítése </p>
+	<p>5.2. Egyedi Egységtesztek </p>
+	<p>5.3. Integrációs Tesztek</p>
+	<p>5.4. Funkcionális Tesztek </p>
+	<p>5.5. Teljesítménytesztek </p>
+	<p>5.6. Stressztesztek </p>
+	<p>5.7. Alfa Teszt </p>
+	<p>5.8. Hibajavítás és Visszajelzés </p>
+	<p>5.9. Béta teszt </p>
+	<p>6. Tesztelési költségek</p>
+	
+<h1>1. Bevezetés</h1>
+
+	<p>
+		A tesztelési tervvel a Game Engine lezárásához közeledünk. Egy game engine tesztelése kritikus szerepet játszik a sikeres játékfejlesztés folyamatában, biztosítva a motor stabilitását, teljesítményét és funkcionalitását. Ez a tesztelési terv készítése során arra összpontosít, hogy az általános és specifikus igényeknek való megfelelés mellett a játékmotor minden szinten optimális állapotban legyen.
+	</p>
+
+<h1>2. A tesztelés jelentősége</h1>
+	<p>
+		A game engine tesztelése rendkívül fontos folyamat a játékok fejlesztése során. A játékmotorok olyan összetett szoftverek, amelyek felelősek a játékok létrehozásának és futtatásának, és számos kritikus funkciót biztosítanak, amelyek közvetlen hatással vannak a játékélményre és a fejlesztői produktivitásra. 
+		<br>A game engineünek több szempontból is megfelelőnek kell lennie ahhoz, hogy a program sikeresen kiadható legyen:
+		<br>
+		<ul>
+			<li>Stabilitás és Megbízhatóság</li>
+			<li>Teljesítmény</li>
+			<li>Funkcionalitás és Kompatibilitás</li>
+			<li>Játékélmény</li>
+			<li>Hibajavítás</li>
+			<li>Biztonság</li>
+			<li>Folyamatos Fejlesztés</li>
+			<li>Optimalizáció</li>
+		</ul>
+	</p>
+<h1>3. Kezdeti időszak</h1>
+
+	<p>
+		Annak érdekében, hogy minden szempontból megfeleljen a játékunk a vele szemben felállított követelményeknek már a program írásának elejétől folyamatos teszteket hajtunk végre. Ezekkel a tesztekkel már nagyon korán észrevehetjük a kódunkban lévő hibákat és hiányosságokat. 
+	</p>
+	<br>
+		<img src="img/testing.jpg" alt="GUI" width="512px" style="margin-top: 10px; text-align: center">
+	<br>
+	<p>
+		A teszteléseink folyamata
+	</p>
+
+<h1>4. Általános szoftvertesztelési szempontok </h1>
+
+	<h2>4.1. Funkcionális követelmények tesztelése </h2>
+		
+		<p>
+			A funkcionális követelmények tesztelése a szoftvertesztelés egyik alapvető aspektusa, és célja a szoftver funkcionalitásának, azaz annak ellenőrzése, hogy a rendszer az elvárt módon és a követelményeknek megfelelően működik-e.
+		<br>
+			Az első és legfontosabb szempont, hogy a szoftver minden egyes funkcióját megfelelően hajtsa végre. A tesztelőknek ellenőrizniük kell, hogy a rendszer minden egyes funkciója a specifikációknak megfelelően működik-e.
+		<br>
+			Emellett a funkcionális tesztelés során a tesztelőknek ellenőrizniük kell a különböző bemeneti kombinációkat, és megbizonyosodniuk kell arról, hogy a rendszer helyesen reagál. Ezt a funkciót a bemeneti adatok helyességének és megfelelőségének, valamint a helyes kimenetek ellenőrzése szolgálja.
+		<br>
+			A felhasználói interfész (UI) tesztelése szintén kritikus fontosságú, mivel ez az a része a szoftvernek, amellyel a felhasználók közvetlenül interagálnak. A tesztelésnek magában kell foglalnia a gombok, menük, űrlapok és más UI elemek működésének ellenőrzését.
+		<br>
+			Bár a teljesítménytesztelés átfogóbb kategóriába tartozik, a funkcionális követelmények között is szerepel, különösen akkor, ha a követelmények olyan funkciókra vonatkoznak, amelyeknek bizonyos időintervallumon belül kell megtörténniük vagy bizonyos válaszidőt kell tartalmazniuk.
+		<br>
+			Ha a szoftver adatbázissal dolgozik, a funkcionális teszteknek érintenie kell az adatok megfelelő kezelését és az adatbázisintegritás fenntartását is.Amelyet a programunk esetében is tesztelni kell.
+		<br>
+			A rendszerszintű tesztelés az összes komponens integrációját és azok közötti kommunikációt vizsgálja. Ezen a szinten a tesztelés magában foglalhatja az összes funkcionális követelmény koherenciáját és azok kölcsönhatásait.
+		<br>
+			Amennyiben a program több, különböző operációs rendszerekre, böngészőkre vagy más környezeti tényezőkön való futtatásra lett fejlesztve, a szükséges kompatibilitást szintén ellenőrizni kell.
+		</p>
+
+	<h2>4.2. Nem funkcionális követelmények tesztelése </h2>
+		
+		<p> 
+			A nem funkcionális követelmények tesztelése a szoftvertesztelés másik fontos aspektusa, amely a szoftver mögötti minőségi tulajdonságokra összpontosít. Ilyen például a teljesítménytesztelés, biztonsági tesztelés, használhatóság tesztelés valamint a megbízhatóság és stabilitás tesztelése is.
+		</p>
+
+	<h2>4.3. Karbantartás</h2>
+
+		<p>
+			Abban az esetben, ha egy korábban már működő funkció hibásan működik, vagy egyáltalán nem működik, szükségessé válik a korábbi változtatások kimenetelének alaposabb vizsgálata. Ez magában foglalhatja az előző fejlesztések visszaállítását és a kívánt funkció helyreállítását. A későbbi frissítések során előfordulhatnak olyan hibák, amelyek ideiglenes verzió visszaállítással kezelhetők. A technológia fejlődése miatt folyamatos problémát jelent a kompatibilitás biztosítása, különféle új hardverek, fejlettebb operációs rendszerek, algoritmusok és szoftverfrissítések megjelenése miatt.
+		</p>
+
+<h1>5. A tesztelés menete</h1>
+
+	<h2>5.1. Tesztterv és Tesztesetek Készítése </h2>
+
+		<p>
+			A tesztterv meghatározza a tesztelési stratégiát, a tesztelendő területeket, és a tesztelés sorrendjét. Ezután teszteseteket kell kidolgozunk minden egyes funkcionalitásra és követelményre.
+		</p>
+
+	<h2>5.2. Egyedi Egységtesztek </h2>
+
+		<p>
+			Az egyedi egységtesztek során ellenőrzzül a játékmotor egyes komponenseinek (pl. renderelési motor, fizikai motor) helyes működését. Ez lehetővé teszi, hogy az esetleges hibákat azonnal azonosítsuk és javítsuk.
+		</p>
+
+	<h2>5.3. Integrációs Tesztek </h2>
+
+		<p>
+			Az integrációs tesztek során a különböző komponensek együttes működését ellenőrzük, és bizonyosodunk meg arról, hogy azok megfelelően kommunikálnak egymással.
+		</p>
+
+	<h2>5.4. Funkcionális Tesztek </h2>
+
+		<p> 
+			Az egyes funkciók és követelmények ellenőrzése a tesztterv alapján. Ez magában foglalhatja a játékelemek létrehozását, animációkat, kameravezérlést, hangok kezelését és egyebeket.
+		</p>
+
+	<h2>5.5. Teljesítménytesztek </h2>
+
+		<p>
+			A játékmotor teljesítményét vizsgáljuk különböző terhelési és környezeti feltételek mellett. Ide tartozik a válaszidő, a keretsebesség és a memóriahasználat ellenőrzése.
+		</p>
+
+	<h2>5.6. Stressztesztek </h2>
+
+		<p>
+			A stressztesztek során extrém terhelésnek tesszük ki a játékmotort, például nagy játékterülettel, sok karakterrel vagy bonyolult fizikai szimulációval. A motornak stabilnak kell maradnia ilyen körülmények között is.
+		</p>
+
+	<h2>5.7. Alfa Teszt </h2>
+
+		<p>
+			A motor korai változatát szűk csoportokkal teszteltetjük, még mielőtt azt a szélesebb közönség számára elérhetővé tennénk. Az alfa tesztelés során az elsődleges célcsoport lehetünk a fejlesztők, a belső tesztelők, vagy más meghívott szakemberek.
+		</p>
+
+	<h2>5.8. Hibajavítás és Visszajelzés </h2>
+
+		<p>
+			Az észlelt hibákat dokumentáljuk és javítjuk, majd ezt ismételjük amíg a game engine megfelel a béta teszt követelményeinek és a minőségi szabványoknak.
+		</p>
+
+	<h2>5.9. Béta teszt </h2>
+
+		<p>
+			A publikus tesztelési szakasza, amely során a felhasználói visszajelzéseket gyűjtve az alkalmazást tovább javítjuk és finomhangoljuk. Ezután jön a tényleges publikálás, amikor a programot elérhetővé tesszük a nyílt közönség számára. Azonban a program fejlesztése ezzel nem fejeződik be, ugyanis a fejlesztések, valamint finomhangolások továbbra is folyhatnak.
+		</p>
+		
+<h1>6. Tesztelési költségek</h1>
+	<p>
+		A tesztelési költségeink várhatóan mérsékeltek lesznek. Az program kezdeti teszteléseit már a program írásától fogva tervezzük elvégezni.
+		Azonban az alfa illetve a béta tesztelés során a külsősök fogadása plusz költségekkel jár, ami a professzionális tesztelők esetén igen magas is lehet. 
+	</p>
+<br>
+	<footer>
+		<p>
+			#2023, KRTN-Brigád, All rights reserved.
+		</p>
+	</footer>
+</body>
+</html>
